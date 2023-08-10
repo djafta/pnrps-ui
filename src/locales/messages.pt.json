@@ -1,0 +1,50 @@
+{
+	"public": {
+		"header": {
+			"menu": {
+				"items": [
+					"Entrar",
+					"Criar conta"
+				]
+			},
+			"signin": {
+				"title": "Sign in",
+				"form": {
+					"label": "Inínicio de Sessão",
+					"submit": "Continuar",
+					"remember": "Manter sessão iniciada.",
+					"notfound": "O endereço de e-mail não foi encontrado",
+					"submitting": "Processando",
+					"email": {
+						"placeholder": "Insiria seu endereço de e-mail"
+					}
+				}
+			},
+			"signup": {
+				"title": "Sign up",
+				"form": {
+					"label": "Criar conta",
+					"submit": "Continuar",
+					"invalid": "O endereço de email foi usado em outra conta",
+					"submitting": "Processando",
+					"email": {
+						"placeholder": "Insiria seu endereço de e-mail"
+					},
+					"firstname": {
+						"placeholder": "Primeiro nome"
+					},
+					"lastname": {
+						"placeholder": "Apelido"
+					}
+				}
+			}
+		}
+	},
+	"private": {
+		"header": {
+			"menu": {
+				"items": ["Definições", "Sair"]
+			}
+		}
+	}
+}
