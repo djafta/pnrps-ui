@@ -8,7 +8,7 @@
 				]
 			},
 			"signin": {
-				"title": "Sign in",
+				"title": "Entrar",
 				"form": {
 					"label": "Inínicio de Sessão",
 					"submit": "Continuar",
@@ -21,7 +21,7 @@
 				}
 			},
 			"signup": {
-				"title": "Sign up",
+				"title": "Inscrever",
 				"form": {
 					"label": "Criar conta",
 					"submit": "Continuar",
