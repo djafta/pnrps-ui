@@ -73,12 +73,15 @@ export function EditUserModal({isOpen, onClose, user}: EditUserModalProps) {
 
         return true;
     }, [userData])
+
     const userFeatures = [
         "create:user",
         "edit:user",
         "read:user",
-        "delete:user"
+        "delete:user",
+        "read:user:list"
     ]
+
     const researchFeatures = [
         "create:research:self",
         "edit:research:self",
@@ -415,6 +418,22 @@ export function EditUserModal({isOpen, onClose, user}: EditUserModalProps) {
                                                 }
                                             }}
                                         >listar:pesquisadores</Checkbox>
+                                    </div>
+                                    <div className={"flex my-3"}>
+                                        <Checkbox
+                                            isChecked={
+                                                hasFeatures("read:user:list")
+                                            }
+                                            onChange={(e) => {
+                                                if (e.target.checked) {
+                                                    setFeatures(features => [...features, "read:user:list"])
+                                                } else {
+                                                    setFeatures(features => features.filter((feature) => {
+                                                        return !features.includes("read:user:list")
+                                                    }))
+                                                }
+                                            }}
+                                        >listar:utilizadores</Checkbox>
                                     </div>
                                 </div>
 
