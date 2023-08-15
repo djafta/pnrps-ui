@@ -11,7 +11,6 @@ import {
     useToast
 } from "@chakra-ui/react";
 
-import {AiOutlineDelete, AiOutlineFileAdd} from "react-icons/ai";
 import React, {useCallback, useState} from "react";
 import {Research} from "@/models";
 import {CreateResearchDataCard} from "@/app/dashboard/management/researches/cards/create-research-data-card";
@@ -40,35 +39,47 @@ export function CreateResearchModal({isOpen, onClose}: UseModalProps) {
     })
 
     const handleCreateResearchClick = useCallback(async () => {
-        const result = await createResearchMutation({
-            variables: {
-                input: {
-                    otherScope: research.otherScope,
-                    endDate: research.endDate,
-                    startDate: research.startDate,
-                    acronym: research.acronym,
-                    title: research.title,
-                    code: research.code,
-                    researchSubfieldId: research.subfield?.id,
-                    researchScopeId: research.scope?.id,
-                    researchSubtypeId: research.subtype?.id,
-                    regionId: research.region?.id,
-                    provinceId: research.province?.id,
-                    countries: research.countries,
+        try {
+
+            const result = await createResearchMutation({
+                variables: {
+                    input: {
+                        otherScope: research.otherScope,
+                        endDate: research.endDate,
+                        startDate: research.startDate,
+                        acronym: research.acronym,
+                        title: research.title,
+                        code: research.code,
+                        researchSubfieldId: research.subfield?.id,
+                        researchScopeId: research.scope?.id,
+                        researchSubtypeId: research.subtype?.id,
+                        regionId: research.region?.id,
+                        provinceId: research.province?.id,
+                        countries: research.countries,
+                    }
                 }
+            })
+
+            if (result.data?.createResearch) {
+                setResearch(result.data?.createResearch)
+
+                toast({
+                    title: "Pesquisa Criada",
+                    description: `Pesquisa "${research.title}" criada com sucesso.`,
+                    status: "success",
+                    isClosable: true,
+                    position: "top",
+                    colorScheme: "teal",
+                })
             }
-        })
-
-        if (result.data?.createResearch) {
-            setResearch(result.data?.createResearch)
-
+        } catch (error) {
             toast({
-                title: "Pesquisa Criada",
-                description: `Pesquisa "${research.title}" criada com sucesso.`,
-                status: "success",
+                title: "Desculpa!",
+                description: `Algo inesperado aconteceu ao criar a pesquisa. Por favor, verifique se tem boa conexão 
+                               com a internet ou se todos os campos obrigatórios estão preenchidos.`,
+                status: "error",
                 isClosable: true,
-                position: "top",
-                colorScheme: "teal",
+                position: "top"
             })
         }
     }, [createResearchMutation, research, toast])
