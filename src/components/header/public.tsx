@@ -1,7 +1,8 @@
 import {FormEvent, useEffect, useState} from "react";
 import {BiUser} from "react-icons/bi";
-import messages from "@/locales/messages.pt.json";
 import Image from "next/image";
+
+import messages from "@/locales/messages.pt.json";
 
 import {
     Button,
