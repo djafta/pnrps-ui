@@ -62,13 +62,10 @@ export default async function ResearchPrint({params}: { params: { research: stri
                                         <Text>
                                             É autorizada a transferência de amostras biológicas, referente ao
                                             projecto/protocolo
-                                            intitulado "<Text>{research.title}</Text>" com
+                                            intitulado `&quot;<Text>{research.title}</Text>`&quot; com
                                             registro <Text>{research.approval.code} </Text>
                                             nas quantidades abaixo descritas:
                                         </Text>
-                                        <View>
-
-                                        </View>
                                     </View>
                                     <View>
                                         <Text style={{

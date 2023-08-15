@@ -15,7 +15,7 @@ import {
     Tabs, useToast
 } from "@chakra-ui/react";
 import {Country, Region, Province, Research} from "@/models";
-import React, {Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState} from "react";
+import React, {Dispatch, SetStateAction, useCallback, useEffect, useState} from "react";
 import {useMutation, useQuery} from "@apollo/client";
 import {
     LIST_COUNTRIES_QUERY,

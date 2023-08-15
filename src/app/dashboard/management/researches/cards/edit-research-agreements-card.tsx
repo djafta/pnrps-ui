@@ -96,7 +96,7 @@ export function EditResearchAgreementsCard({research}: EditResearchAgreementsCar
                 }
             })
         }
-    }, [research])
+    }, [getResearchMaterailTransferAgreementsQuery, research])
 
     useEffect(() => {
         if (listResearchSamplesQuery.data?.listResearchSamples) {
@@ -224,7 +224,6 @@ export function EditResearchAgreementsCard({research}: EditResearchAgreementsCar
                                                             <FormLabel className={"text-sm"}>Observação</FormLabel>
                                                             <Textarea defaultValue={mta.description}
                                                                       name={"description"}>
-
                                                             </Textarea>
                                                         </FormControl>
                                                     </div>
