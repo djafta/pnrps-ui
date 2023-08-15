@@ -56,7 +56,7 @@ export function EditResearchModal({isOpen, onClose, research}: EditResearchModal
                             <EditFinancingCard research={researchData} setResearch={setResearchData}/>
                             <EditResearchApprovalCard research={researchData} setResearch={setResearchData}/>
                             <EditResearchFilesCard research={researchData} setResearch={setResearchData}/>
-                            <EditResearchAgreementsCard/>
+                            <EditResearchAgreementsCard research={researchData}/>
                             <ResearchDangerZoneCard research={researchData} setResearch={setResearchData}/>
                         </div>
                     </ModalBody>

@@ -137,21 +137,21 @@ export const fakeBodies = [
         id: "1",
         name: "",
         code: "",
-        type: "",
+        type: {},
         description: ""
     },
     {
         id: "2",
         name: "",
         code: "",
-        type: "",
+        type: {},
         description: ""
     },
     {
         id: "3",
         name: "",
         code: "",
-        type: "",
+        type: {},
         description: ""
     }
 ]

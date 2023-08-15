@@ -41,7 +41,7 @@ export function BodySettings() {
 
     const [search, setSearch] = useState("");
     const [selects, setSelects] = useState<Organization[]>([]);
-    const [bodies, setBodies] = useState<Organization[]>(fakeBodies);
+    const [bodies, setBodies] = useState<Organization[]>(fakeBodies as Organization[]);
     const listBodiesQuery = useQuery(LIST_ORGANIZATIONS_QUERY);
 
     const [deleteBodyMutation, deleteBodyMutationResult] = useMutation(

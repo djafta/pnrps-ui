@@ -27,9 +27,9 @@ export default function Settings() {
     const getOrganizationStatisticQuery = useQuery(GET_ORGANIZATION_STATISTIC, {
         pollInterval: 1000 * 10
     })
-    const [researchStatistic, setResearchStatistic] = useState(null)
-    const [financierStatistic, setFinancierStatistic] = useState(null)
-    const [organizationStatistic, setOrganizationStatistic] = useState(null)
+    const [researchStatistic, setResearchStatistic] = useState<any>(null)
+    const [financierStatistic, setFinancierStatistic] = useState<any>(null)
+    const [organizationStatistic, setOrganizationStatistic] = useState<any>(null)
 
     useEffect(() => {
         if (getResearchStatisticQuery.data?.getResearchStatistics) {
@@ -82,8 +82,10 @@ export default function Settings() {
                             y2: 1
                         },
                         stops: [
-                            [0, Highcharts.getOptions().colors[0]],
-                            [1, Highcharts.color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                            //@ts-ignore
+                            [0, Highcharts!.getOptions().colors[0]],
+                            //@ts-ignore
+                            [1, Highcharts.color(Highcharts!.getOptions()!.colors[0]).setOpacity(0).get('rgba')]
                         ]
                     },
                     marker: {

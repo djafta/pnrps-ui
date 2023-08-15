@@ -91,7 +91,7 @@ export function CreateResearchModal({isOpen, onClose}: UseModalProps) {
                                     <EditFinancingCard research={research} setResearch={setResearch}/>
                                     <EditResearchFilesCard research={research} setResearch={setResearch}/>
                                     <EditResearchApprovalCard research={research} setResearch={setResearch}/>
-                                    <EditResearchAgreementsCard/>
+                                    <EditResearchAgreementsCard research={research}/>
                                     <ResearchDangerZoneCard research={research} setResearch={setResearch}/>
                                 </>
                                 :

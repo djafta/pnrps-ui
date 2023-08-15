@@ -14,6 +14,8 @@ interface Research {
 interface ResearchStatistic {
     total: number
     monthly: number[]
+    approved: boolean
+    nonApproved: boolean
 }
 
 export default function Dashboard() {
@@ -25,7 +27,7 @@ export default function Dashboard() {
         pollInterval: 1000 * 10
     })
     const [researchStatistic, setResearchStatistic] = useState<ResearchStatistic | null>(null)
-    const [userStatistic, setUserStatistic] = useState(null)
+    const [userStatistic, setUserStatistic] = useState<any>(null)
     const {isAuthorized} = useAuth();
 
     useEffect(() => {
@@ -42,6 +44,7 @@ export default function Dashboard() {
         try {
             (async () => {
                 if (window.document.getElementById("monthly")) {
+                    // @ts-ignore
                     Highcharts.chart('monthly', {
                         chart: {
                             zoomType: 'x'
@@ -76,7 +79,9 @@ export default function Dashboard() {
                                         y2: 1
                                     },
                                     stops: [
+                                        //@ts-ignore
                                         [0, Highcharts.getOptions().colors[0]],
+                                        //@ts-ignore
                                         [1, Highcharts.color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
                                     ]
                                 },
@@ -101,7 +106,8 @@ export default function Dashboard() {
                     });
                 }
 
-                if (window.document.getElementById("statuses"))
+                if (window.document.getElementById("statuses")) {
+                    // @ts-ignore
                     Highcharts.chart('statuses', {
                         chart: {
                             plotBackgroundColor: null,
@@ -144,16 +150,19 @@ export default function Dashboard() {
                                 {
                                     name: "Aprovadas",
                                     y: researchStatistic?.approved,
+                                    // @ts-ignore
                                     color: Highcharts.getOptions().colors[0]
                                 },
                                 {
                                     name: "Não Aprovadas",
                                     y: researchStatistic?.nonApproved,
+                                    // @ts-ignore
                                     color: Highcharts.color(Highcharts.getOptions().colors[0]).setOpacity(0.5).get('rgba').toString()
                                 }
                             ]
                         }]
                     });
+                }
 
             })();
         } catch (e) {
