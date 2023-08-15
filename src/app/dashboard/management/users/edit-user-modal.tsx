@@ -92,6 +92,38 @@ export function EditUserModal({isOpen, onClose, user}: EditUserModalProps) {
         "delete:manager",
     ]
 
+    const settingsFeatures = [
+        "create:research_settings",
+        "edit:research_settings",
+        "read:research_settings",
+        "delete:research_settings",
+
+        "create:geographic_data",
+        "edit:geographic_data",
+        "read:geographic_data",
+        "delete:geographic_data",
+
+        "create:organization",
+        "edit:organization",
+        "read:organization",
+        "delete:organization",
+
+        "create:financing_type",
+        "edit:financing_type",
+        "read:financing_type",
+        "delete:financing_type",
+
+        "read:researcher_settings",
+        "delete:researcher_settings",
+        "create:researcher_settings",
+        "edit:researcher_settings",
+
+        "create:financier",
+        "edit:financier",
+        "read:financier",
+        "delete:financier"
+    ]
+
     return (
         <Modal size={"6xl"} isOpen={isOpen} onClose={onClose} scrollBehavior={"inside"}>
             <ModalOverlay/>
@@ -460,6 +492,31 @@ export function EditUserModal({isOpen, onClose, user}: EditUserModalProps) {
                                                 <Code lineHeight={"1.2rem"} rounded={"1rem"}>listar:gestores</Code>
                                             </FormHelperText>
                                         </FormControl>
+                                    </div>
+                                </div>
+                            </CardBody>
+                        </Card>
+                        <Card>
+                            <CardHeader>
+                                <h3 className={"text-lg"}>Permissões de configurações</h3>
+                            </CardHeader>
+                            <CardBody>
+                                <div className={"flex flex-col gap-2"}>
+                                    <Checkbox
+                                        isChecked={
+                                            hasFeatures(...settingsFeatures)
+                                        }
+                                        onChange={(e) => {
+                                            if (e.target.checked) {
+                                                setFeatures(features => [...features, ...settingsFeatures])
+                                            } else {
+                                                setFeatures(features => features.filter((feature) => {
+                                                    return !settingsFeatures.includes(feature)
+                                                }))
+                                            }
+                                        }}
+                                    >gerir:configurações</Checkbox>
+                                    <div className={"flex flex-col gap-5 ps-6 text-xs"}>
                                     </div>
                                 </div>
                             </CardBody>
