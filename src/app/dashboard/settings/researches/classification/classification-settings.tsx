@@ -97,7 +97,7 @@ export function ClassificationSettings() {
                 onClose={deleteAlertDialogDisclosure.onClose}
             />
 
-            <Card className={"min-h-[30rem] xl:min-h-[36rem] max-h-[80vh] w-full overflow-hidden"}>
+            <Card>
                 <CardHeader className={"bg-bar text-white p-2"}>
                     <div className={"flex justify-between items-center"}>
                         <Heading className={"font-medium flex-grow"} size={"sm"}>Classificações da pesquisa</Heading>
@@ -127,21 +127,23 @@ export function ClassificationSettings() {
                 <CardBody className={"flex"}>
                     <div className={"w-full flex flex-1"}>
                         <div className={"flex w-full flex-1 gap-4 flex-col justify-between"}>
-                            <Accordion allowMultiple={true}>
-                                {
-                                    (search.length > 0 ? filteredList : classifications).map((classification) => {
-                                        return (
-                                            <ClassificationItem
-                                                key={classification.id}
-                                                loading={listResearchClassificationQuery.loading || fakeClassifications === classifications}
-                                                selects={selects}
-                                                setSelects={setSelects}
-                                                classification={classification}
-                                            />
-                                        )
-                                    })
-                                }
-                            </Accordion>
+                            <div className={"min-h-[26rem] max-h-[65vh]  overflow-y-auto"}>
+                                <Accordion allowMultiple={true}>
+                                    {
+                                        (search.length > 0 ? filteredList : classifications).map((classification) => {
+                                            return (
+                                                <ClassificationItem
+                                                    key={classification.id}
+                                                    loading={listResearchClassificationQuery.loading || fakeClassifications === classifications}
+                                                    selects={selects}
+                                                    setSelects={setSelects}
+                                                    classification={classification}
+                                                />
+                                            )
+                                        })
+                                    }
+                                </Accordion>
+                            </div>
                             <div className={"flex items-center justify-between flex-row-reverse gap-2 transition-all"}>
                                 <div className={"flex flex-row-reverse gap-2 transition-all"}>
                                     <IconButton

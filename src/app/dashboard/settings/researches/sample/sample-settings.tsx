@@ -92,7 +92,7 @@ export function SampleSettings() {
                 onClose={deleteSampleAlertDialog.onClose}
                 isOpen={deleteSampleAlertDialog.isOpen}
             />
-            <Card className={"min-h-[30rem] xl:min-h-[36rem] max-h-[80vh] w-full overflow-hidden"}>
+            <Card>
                 <CardHeader className={"bg-bar text-white p-2"}>
                     <div className={"flex justify-between items-center"}>
                         <Heading className={"font-medium flex-grow"} size={"sm"}>Amostras da pesquisa</Heading>
@@ -123,7 +123,7 @@ export function SampleSettings() {
                 <CardBody className={"flex"}>
                     <div className={"w-full flex flex-1"}>
                         <div className={"flex w-full flex-1 gap-4 flex-col justify-between"}>
-                            <div>
+                            <div className={"min-h-[26rem] max-h-[65vh]  overflow-y-auto"}>
                                 {
                                     (search.length > 0 ? filteredList : samples)?.map((sample) => {
                                         return (
