@@ -99,7 +99,7 @@ export function DocumentSettings() {
                 onClose={deleteDocumentAlertDialog.onClose}
                 isOpen={deleteDocumentAlertDialog.isOpen}
             />
-            <Card width={"full"} overflow={"hidden"}>
+            <Card className={"min-h-[30rem] xl:min-h-[36rem] max-h-[80vh] w-full overflow-hidden"}>
                 <CardHeader className={"bg-bar text-white p-2"}>
                     <div className={"flex justify-between items-center"}>
                         <Heading className={"font-medium flex-grow"} size={"sm"}>Documentos da pesquisa</Heading>
@@ -127,9 +127,9 @@ export function DocumentSettings() {
                         </FormControl>
                     </div>
                 </CardHeader>
-                <CardBody>
-                    <div className={"w-full flex"}>
-                        <div className={"flex w-full gap-4 flex-col"}>
+                <CardBody className={"flex"}>
+                    <div className={"w-full flex-1 flex"}>
+                        <div className={"flex flex-1 w-full gap-4 flex-col justify-between"}>
                             <div>
                                 {
                                     (search.length > 0 ? filteredList : documents)?.map((document) => {

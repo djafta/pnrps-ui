@@ -92,7 +92,7 @@ export function SampleSettings() {
                 onClose={deleteSampleAlertDialog.onClose}
                 isOpen={deleteSampleAlertDialog.isOpen}
             />
-            <Card width={"full"} overflow={"hidden"}>
+            <Card className={"min-h-[30rem] xl:min-h-[36rem] max-h-[80vh] w-full overflow-hidden"}>
                 <CardHeader className={"bg-bar text-white p-2"}>
                     <div className={"flex justify-between items-center"}>
                         <Heading className={"font-medium flex-grow"} size={"sm"}>Amostras da pesquisa</Heading>
@@ -120,9 +120,9 @@ export function SampleSettings() {
                         </FormControl>
                     </div>
                 </CardHeader>
-                <CardBody>
-                    <div className={"w-full flex"}>
-                        <div className={"flex w-full gap-4 flex-col"}>
+                <CardBody className={"flex"}>
+                    <div className={"w-full flex flex-1"}>
+                        <div className={"flex w-full flex-1 gap-4 flex-col justify-between"}>
                             <div>
                                 {
                                     (search.length > 0 ? filteredList : samples)?.map((sample) => {
