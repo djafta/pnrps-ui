@@ -1435,3 +1435,13 @@ export const GET_RESEARCH_MATERIAL_TRANSFER_AGREEMENTS = gql`
         }
     }
 `
+
+export const GET_DEFAULT_ORGANIZATION_TYPE_QUERY = gql`
+    query GetDefaultOrganizationType {
+        getDefaultOrganizationType {
+            id
+            name
+            description
+        }
+    }
+`

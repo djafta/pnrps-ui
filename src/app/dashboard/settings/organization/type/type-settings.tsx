@@ -32,6 +32,7 @@ import {DeleteAlertDialog} from "@/components/delete-alert-dialog";
 import {CreateTypeModal} from "@/app/dashboard/settings/organization/type/create-type-modal";
 import {EditTypeModal} from "@/app/dashboard/settings/organization/type/edit-type-modal";
 import {TypeItem} from "@/app/dashboard/settings/organization/type/type-item";
+import {useDefault} from "@/hooks/default";
 
 export function TypeSettings() {
     const toast = useToast();
@@ -50,6 +51,7 @@ export function TypeSettings() {
             refetchQueries: [LIST_ORGANIZATION_TYPES_QUERY]
         }
     )
+    const {isDefault, hasDefault} = useDefault();
 
     const filteredList: OrganizationType[] = types?.filter(scope => scope.name.toLowerCase().includes(search.toLowerCase()));
 
@@ -155,6 +157,7 @@ export function TypeSettings() {
                                         colorScheme={"teal"}
                                     />
                                     <IconButton
+                                        isDisabled={hasDefault(selects)}
                                         className={`${selects.length > 0 ? "visible" : "invisible"}`}
                                         colorScheme={"teal"}
                                         aria-label={""}

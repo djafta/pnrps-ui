@@ -1,5 +1,5 @@
 import {useQuery} from "@apollo/client";
-import {GET_DEFAULT_FINANCIER_QUERY, GET_DEFAULT_RESEARCHER_ROLE_QUERY} from "@/apollo";
+import {GET_DEFAULT_FINANCIER_QUERY, GET_DEFAULT_ORGANIZATION_TYPE_QUERY, GET_DEFAULT_RESEARCHER_ROLE_QUERY} from "@/apollo";
 
 interface Record {
     id: string
@@ -7,6 +7,7 @@ interface Record {
 }
 
 export function useDefault() {
+    const {data: defaultOrganizationTypeData} = useQuery(GET_DEFAULT_ORGANIZATION_TYPE_QUERY)
     const {data: defaultResearcherRoleData} = useQuery(GET_DEFAULT_RESEARCHER_ROLE_QUERY)
     const {data: defaultFinancierData} = useQuery(GET_DEFAULT_FINANCIER_QUERY)
 
@@ -21,6 +22,10 @@ export function useDefault() {
 
         if (record["__typename"] === "Financier") {
             return record.id === defaultFinancierData?.getDefaultFinancier.id
+        }
+
+        if (record["__typename"] === "OrganizationType") {
+            return record.id === defaultOrganizationTypeData?.getDefaultOrganizationType.id
         }
 
         return false;
