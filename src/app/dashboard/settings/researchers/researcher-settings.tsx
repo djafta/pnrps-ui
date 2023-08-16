@@ -127,7 +127,7 @@ export function ResearcherSettings() {
                 <CardBody>
                     <div className={"w-full flex"}>
                         <div className={"flex w-full gap-4 flex-col"}>
-                            <div>
+                            <div className={"min-h-[26rem] max-h-[65vh] overflow-y-auto"}>
                                 <Accordion allowMultiple={true}>
                                     {
                                         (search.length > 0 ? filteredList : roles).map((role) => {
