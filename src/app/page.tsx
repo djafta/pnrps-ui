@@ -6,7 +6,9 @@ import {PublicHeader} from "@/components/header/public";
 
 import {
     Button,
-    Card, FormControl, Input,
+    Card,
+    FormControl,
+    Input,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -15,21 +17,31 @@ import {
     ModalHeader,
     ModalOverlay,
     Skeleton,
-    SkeletonText, Switch,
+    SkeletonText,
+    Switch,
     Table,
     TableCaption,
     TableContainer,
     Tbody,
     Td,
     Th,
-    Thead, Tooltip,
+    Thead,
+    Tooltip,
     Tr,
     useDisclosure
 } from "@chakra-ui/react";
 import {Research} from "@/models";
+import {useAuth} from "@/hooks/auth";
+import {useRouter} from "next/navigation";
 
 export default function Home() {
     const {isOpen, onOpen, onClose} = useDisclosure();
+    const {user} = useAuth();
+    const router = useRouter();
+
+    if (user) {
+        router.push("/dashboard")
+    }
 
     function handleResearchRowClick(research: Research | undefined) {
         onOpen()
@@ -135,7 +147,7 @@ export default function Home() {
                                     </Tr>
                                 </Thead>
                                 <Tbody>
-                                    {Array(10).fill("").map((value, index, array) => {
+                                    {Array(0).fill("").map((value, index, array) => {
                                         return (
                                             <Tr key={index} onClick={() => handleResearchRowClick(value)}
                                                 className={"hover:bg-slate-200"}>
