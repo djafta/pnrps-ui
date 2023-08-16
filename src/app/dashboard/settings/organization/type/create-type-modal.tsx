@@ -9,7 +9,7 @@ import {
     Heading,
     Input,
     Modal,
-    ModalBody,
+    ModalBody, ModalCloseButton,
     ModalContent,
     ModalFooter,
     ModalHeader,
@@ -72,6 +72,7 @@ export function CreateTypeModal({isOpen, onClose}: UseModalProps) {
             <ModalContent>
                 <ModalHeader>
                     <Heading size={"sm"}>Criar Tipo Organização</Heading>
+                    <ModalCloseButton/>
                 </ModalHeader>
                 <ModalBody className={"flex flex-col gap-4"}>
                     <Card>
