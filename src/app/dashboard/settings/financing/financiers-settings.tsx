@@ -10,18 +10,20 @@ import {
     Heading,
     IconButton,
     Input,
-    Tooltip, useDisclosure
+    Tooltip,
+    useDisclosure
 } from "@chakra-ui/react";
+import {LIST_FINANCIERS_QUERY} from "@/apollo";
 
 import {AddIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons";
 import {AiOutlineSearch} from "react-icons/ai";
 import {fakeFinanciers} from "@/skelton-data";
 
 import {useQuery} from "@apollo/client";
-import {LIST_FINANCIERS_QUERY} from "@/apollo";
+import {Financier} from "@/models";
+import {useDefault} from "@/hooks/default";
 import {FinancierItem} from "@/app/dashboard/settings/financing/financier-item";
 import {CreateFinancierModal} from "@/app/dashboard/settings/financing/create-financier-modal";
-import {Financier} from "@/models";
 
 export function FinanciersSettings() {
     const createFinancierModalDisclosure = useDisclosure();
@@ -31,6 +33,7 @@ export function FinanciersSettings() {
     const listFinanciersQuery = useQuery(LIST_FINANCIERS_QUERY);
 
     const filteredList: Financier[] = financiers.filter(financier => financier.name.toLowerCase().includes(search.toLowerCase()));
+    const {hasDefault} = useDefault();
 
     useEffect(() => {
         if (listFinanciersQuery.data) {
@@ -75,7 +78,7 @@ export function FinanciersSettings() {
                 <CardBody>
                     <div className={"w-full flex"}>
                         <div className={"flex w-full gap-4 flex-col"}>
-                            <div>
+                            <div className={"min-h-[26rem] max-h-[65vh]  overflow-y-auto"}>
                                 <Accordion allowMultiple={true}>
                                     {
                                         (search.length > 0 ? filteredList : financiers).map((financier) => {
@@ -101,6 +104,7 @@ export function FinanciersSettings() {
                                         colorScheme={"teal"}
                                     />
                                     <IconButton
+                                        isDisabled={hasDefault(selects)}
                                         className={`${selects.length > 0 ? "visible" : "invisible"}`}
                                         colorScheme={"teal"}
                                         aria-label={""}

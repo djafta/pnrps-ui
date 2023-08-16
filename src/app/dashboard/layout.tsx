@@ -23,7 +23,7 @@ export default function RootLayout({children,}: { children: React.ReactNode }) {
             <>
                 <PrivateHeader/>
                 {children}
-                <footer className={"w-full bottom-20"}>
+                <footer className={"w-full bottom-20 py-6"}>
                     <div className={"flex flex-col items-center"}>
                         <p>
                             © Copyright <a className={"text-blue-500"} href={""}>INS</a>. Todos direitos reservados
