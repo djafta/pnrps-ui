@@ -12,18 +12,24 @@ import {
     Skeleton,
     useToast
 } from "@chakra-ui/react";
+
 import {
     Research,
     ResearchClassification,
     ResearchField,
     ResearchScope,
 } from "@/models";
-import React, {Dispatch, SetStateAction, useCallback, useEffect, useState} from "react";
+
+import React, {Dispatch, SetStateAction, useCallback, useEffect, useMemo} from "react";
+
 import {useMutation, useQuery} from "@apollo/client";
+
 import {
     LIST_RESEARCH_CLASSIFICATIONS_QUERY,
     LIST_RESEARCH_FIELDS_QUERY,
-    LIST_RESEARCH_SCOPES_QUERY, LIST_RESEARCHES_QUERY, UPDATE_RESEARCH_MUTATION
+    LIST_RESEARCH_SCOPES_QUERY,
+    LIST_RESEARCHES_QUERY,
+    UPDATE_RESEARCH_MUTATION
 } from "@/apollo";
 
 export interface EditResearchDataProps {
@@ -46,22 +52,19 @@ export function EditResearchDataCard({research, setResearch}: EditResearchDataPr
         refetchQueries: [LIST_RESEARCHES_QUERY]
     });
 
-    const [classifications, setClassifications] = useState<ResearchClassification[]>([])
-    const [fields, setFields] = useState<ResearchField[]>([])
-    const [scopes, setScopes] = useState<ResearchScope[]>([])
-    const toast = useToast();
+    const classifications = useMemo(() => {
+        return (listResearchClassificationQuery.data?.listResearchClassifications || []) as ResearchClassification[]
+    }, [listResearchClassificationQuery])
 
-    useEffect(() => {
-        if (listResearchClassificationQuery.data?.listResearchClassifications) {
-            setClassifications(listResearchClassificationQuery.data?.listResearchClassifications)
-        }
-        if (listResearchFieldsQuery.data?.listResearchFields) {
-            setFields(listResearchFieldsQuery.data.listResearchFields)
-        }
-        if (listResearchScopesQuery.data?.listResearchScopes) {
-            setScopes(listResearchScopesQuery.data.listResearchScopes)
-        }
-    }, [listResearchClassificationQuery, listResearchFieldsQuery, listResearchScopesQuery])
+    const fields = useMemo(() => {
+        return (listResearchFieldsQuery.data?.listResearchFields || []) as ResearchField[]
+    }, [listResearchFieldsQuery])
+
+    const scopes = useMemo(() => {
+        return (listResearchScopesQuery.data?.listResearchScopes || []) as ResearchScope[]
+    }, [listResearchScopesQuery])
+
+    const toast = useToast();
 
     const handleSaveButtonClick = useCallback(async () => {
         await updateResearchMutation({
@@ -93,7 +96,7 @@ export function EditResearchDataCard({research, setResearch}: EditResearchDataPr
     }, [research, toast, updateResearchMutation])
 
     useEffect(() => {
-        if (!research.classification || !research.field) {
+        if (!research.classification || !research.field && (classifications && fields && scopes)) {
 
             const classification = classifications.find(classification => {
                 return classification.types?.find((type) => type.subtypes?.find(subtype => subtype.id === research.subtype?.id))
@@ -101,19 +104,20 @@ export function EditResearchDataCard({research, setResearch}: EditResearchDataPr
 
             if (classification) {
                 const type = classification.types && classification.types.find(type => type.subtypes?.find((subtype) => subtype.id === research.subtype?.id))
+
                 if (type) {
                     setResearch((research) => {
                         return {
                             ...research,
                             classification,
                             type,
-                            subtype: type.subtypes && type.subtypes[0]
                         }
                     })
                 }
             }
 
             const field = fields.find((field => field.subfields?.find(subfield => subfield.id === research.subfield?.id)))
+
             if (field) {
                 setResearch(research => {
                     return {
@@ -123,7 +127,7 @@ export function EditResearchDataCard({research, setResearch}: EditResearchDataPr
                 })
             }
         }
-    }, [classifications, fields, research, setResearch])
+    }, [classifications, fields, research, scopes, setResearch])
 
     return (
         <Card>
@@ -184,7 +188,7 @@ export function EditResearchDataCard({research, setResearch}: EditResearchDataPr
                             <FormLabel className={"text-sm"}>Classificação da pesquisa</FormLabel>
                             <Skeleton isLoaded={!!classifications.length}>
                                 <Select
-                                    defaultValue={research.classification?.id}
+                                    value={research.classification?.id}
                                     onChange={e => {
                                         const classification = classifications?.find(c => c.id === e.target.value)
                                         const type = classification?.types && classification?.types[0]
@@ -217,6 +221,7 @@ export function EditResearchDataCard({research, setResearch}: EditResearchDataPr
                             <FormLabel className={"text-sm"}>Tipo de pesquisa</FormLabel>
                             <Skeleton isLoaded={!!research.classification?.types?.length}>
                                 <Select
+                                    value={research.type?.id}
                                     onChange={e => {
                                         const type = research.classification?.types?.find(c => c.id === e.target.value)
                                         const subtype = type?.subtypes && type?.subtypes[0]
@@ -245,6 +250,7 @@ export function EditResearchDataCard({research, setResearch}: EditResearchDataPr
                             <FormLabel className={"text-sm"}>Subtipo de pesquisa</FormLabel>
                             <Skeleton isLoaded={!!research.type?.subtypes?.length}>
                                 <Select
+                                    value={research.subtype?.id}
                                     onChange={e => {
                                         setResearch({
                                             ...research,
@@ -257,6 +263,7 @@ export function EditResearchDataCard({research, setResearch}: EditResearchDataPr
                                             return (
                                                 <option
                                                     key={subtype.id}
+                                                    value={subtype.id}
                                                 >
                                                     {subtype.name}
                                                 </option>
@@ -272,6 +279,7 @@ export function EditResearchDataCard({research, setResearch}: EditResearchDataPr
                             <FormLabel className={"text-sm"}>Área da pesquisa</FormLabel>
                             <Skeleton isLoaded={!!fields.length}>
                                 <Select
+                                    value={research.field?.id}
                                     onChange={e => {
                                         setResearch({
                                             ...research,
@@ -298,6 +306,7 @@ export function EditResearchDataCard({research, setResearch}: EditResearchDataPr
                             <FormLabel className={"text-sm"}>Subárea de pesquisa</FormLabel>
                             <Skeleton isLoaded={!!research.field?.subfields?.length}>
                                 <Select
+                                    value={research.subfield?.id}
                                     onChange={e => {
                                         setResearch({
                                             ...research,
@@ -326,7 +335,7 @@ export function EditResearchDataCard({research, setResearch}: EditResearchDataPr
                             <FormLabel className={"text-sm"}>Âmbito da pesquisa</FormLabel>
                             <Skeleton isLoaded={!!scopes.length}>
                                 <Select
-                                    defaultValue={research.scope?.id}
+                                    value={research.scope?.id}
                                     onChange={e => {
                                         setResearch({
                                             ...research,

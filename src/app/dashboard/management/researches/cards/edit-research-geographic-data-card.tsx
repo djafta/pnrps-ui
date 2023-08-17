@@ -72,14 +72,14 @@ export function EditResearchGeographicDataCard({research, setResearch}: EditGeog
 
 
         if (countries) {
+            if (research.countries) {
+                setIndex(0)
+            } else if (research.province) {
+                setIndex(2)
+            } else {
+                setIndex(1)
+            }
             setResearch((research) => {
-                if (research.countries) {
-                    setIndex(0)
-                } else if (research.province) {
-                    setIndex(2)
-                } else {
-                    setIndex(1)
-                }
 
                 let country: Country | undefined = undefined
                 let region: Region | undefined = undefined
