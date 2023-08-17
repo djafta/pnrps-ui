@@ -3,7 +3,10 @@ import {
     CardBody,
     CardHeader,
     FormLabel,
-    Heading, Input, Select, Skeleton,
+    Heading,
+    Input,
+    Select,
+    Skeleton,
     Tab,
     TabList,
     TabPanel,
@@ -11,7 +14,7 @@ import {
     Tabs
 } from "@chakra-ui/react";
 import {Country, Region, Province, Research} from "@/models";
-import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
+import React, {Dispatch, SetStateAction, useEffect, useMemo, useState} from "react";
 import {useQuery} from "@apollo/client";
 import {LIST_COUNTRIES_QUERY} from "@/apollo";
 
@@ -24,13 +27,9 @@ export function CreateResearchGeographicDataCard({research, setResearch}: Geogra
     const listResearchCountriesQuery = useQuery(LIST_COUNTRIES_QUERY, {
         pollInterval: 1000 * 10 // 10 seconds
     });
-    const [countries, setCountries] = useState<Country[]>([])
 
-    useEffect(() => {
-        if (listResearchCountriesQuery.data?.listCountries) {
-            setCountries(listResearchCountriesQuery.data.listCountries)
-        }
-
+    const countries = useMemo(() => {
+        return (listResearchCountriesQuery.data.listCountries || []) as Country[]
     }, [listResearchCountriesQuery])
 
     useEffect(() => {

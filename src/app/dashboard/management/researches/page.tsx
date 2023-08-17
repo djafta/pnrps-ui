@@ -22,26 +22,24 @@ import {
 } from "@chakra-ui/react";
 
 import {LIST_RESEARCHES_QUERY} from "@/apollo";
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {useQuery} from "@apollo/client";
 import {Research} from "@/models";
 
 export default function ResearchManagement() {
-    const createResearchModalDisclosure = useDisclosure();
-    const editResearchModalDisclosure = useDisclosure();
-    const [research, setResearch] = useState<Research | null>(null);
-    const [researches, setResearches] = useState<Research[]>([])
-
     const listResearchesQuery = useQuery(LIST_RESEARCHES_QUERY, {
         pollInterval: 1000 * 30 // 30 seconds
     })
-    const {isAuthorized} = useAuth()
 
-    useEffect(() => {
-        if (listResearchesQuery.data?.listResearches) {
-            setResearches(listResearchesQuery.data?.listResearches)
-        }
-    }, [listResearchesQuery, setResearches])
+    const researches = useMemo(() => {
+        return (listResearchesQuery.data?.listResearches || []) as Research[]
+    }, [listResearchesQuery])
+
+    const createResearchModalDisclosure = useDisclosure();
+    const editResearchModalDisclosure = useDisclosure();
+    const [research, setResearch] = useState<Research | null>(null);
+
+    const {isAuthorized} = useAuth()
 
     function handleResearchRowClick(research: Research | undefined) {
         if (research) {

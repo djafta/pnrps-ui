@@ -1,7 +1,8 @@
 import {
     Button,
     Card,
-    CardBody, CardFooter,
+    CardBody,
+    CardFooter,
     CardHeader,
     FormLabel,
     Heading,
@@ -12,10 +13,11 @@ import {
     TabList,
     TabPanel,
     TabPanels,
-    Tabs, useToast
+    Tabs,
+    useToast
 } from "@chakra-ui/react";
 import {Country, Region, Province, Research} from "@/models";
-import React, {Dispatch, SetStateAction, useCallback, useEffect, useState} from "react";
+import React, {Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState} from "react";
 import {useMutation, useQuery} from "@apollo/client";
 import {
     LIST_COUNTRIES_QUERY,
@@ -32,29 +34,25 @@ export function EditResearchGeographicDataCard({research, setResearch}: EditGeog
     const listResearchCountriesQuery = useQuery(LIST_COUNTRIES_QUERY, {
         pollInterval: 1000 * 10 // 10 seconds
     });
+
     const [updateResearchMutation, updateResearchMutationResult] = useMutation(UPDATE_RESEARCH_COVERAGE_AREA_MUTATION, {
         refetchQueries: [LIST_RESEARCHES_QUERY]
     });
-    const [countries, setCountries] = useState<Country[]>([])
+
+    const countries = useMemo(() => {
+        return (listResearchCountriesQuery.data?.listCountries || []) as Country[]
+    }, [listResearchCountriesQuery])
+
     const [index, setIndex] = useState(0);
     const toast = useToast();
 
     const handleSaveButtonClick = useCallback(async () => {
-        console.log({
-            input: {
-                id: research.id,
-                countries: index === 0 ? research.countries : undefined,
-                regionId: index === 1 ? research.region?.id : undefined,
-                provinceId: index === 2 ? research.province?.id : undefined,
-            }
-        })
-
         await updateResearchMutation({
             variables: {
                 input: {
                     id: research.id,
                     countries: index === 0 ? research.countries : undefined,
-                    regionId: index === 1 ? research.region?.id : undefined,
+                    regionId: index !== 0 ? research.region?.id : undefined,
                     provinceId: index === 2 ? research.province?.id : undefined,
                 }
             }
@@ -71,32 +69,45 @@ export function EditResearchGeographicDataCard({research, setResearch}: EditGeog
     }, [research, toast, index, updateResearchMutation])
 
     useEffect(() => {
-        if (listResearchCountriesQuery.data?.listCountries) {
-            setCountries(listResearchCountriesQuery.data.listCountries)
-        }
-    }, [listResearchCountriesQuery])
 
-    useEffect(() => {
+
         if (countries) {
-            const country = countries[0]
-            const region = country?.regions && country.regions[0]
-
-            if (research.countries) {
-                setIndex(0)
-            } else if (research.province) {
-                setIndex(2)
-            } else {
-                setIndex(1)
-            }
-
             setResearch((research) => {
+                if (research.countries) {
+                    setIndex(0)
+                } else if (research.province) {
+                    setIndex(2)
+                } else {
+                    setIndex(1)
+                }
+
+                let country: Country | undefined = undefined
+                let region: Region | undefined = undefined
+
+                for (let c of countries) {
+                    for (let r of c.regions) {
+                        if (r.provinces.find(p => p.id === research.province?.id)) {
+                            region = r;
+                            break
+                        }
+                    }
+                }
+
+                for (let c of countries) {
+                    if (c.regions.find(r => r.id === region?.id)) {
+                        country = c;
+                        break
+                    }
+                }
+
                 return {
                     ...research,
                     country,
-                    region: research.region || region,
+                    region: region ? region : country?.regions[0]
                 }
             })
         }
+
     }, [countries, setResearch])
 
     return (
@@ -141,6 +152,8 @@ export function EditResearchGeographicDataCard({research, setResearch}: EditGeog
                                                 <FormLabel className={"text-sm"}>País</FormLabel>
                                                 <Skeleton isLoaded={!!countries.length}>
                                                     <Select
+                                                        name={"country"}
+                                                        value={research.country?.id}
                                                         onChange={e => {
                                                             const country = countries?.find(c => c.id === e.target.value)
                                                             const region = country?.regions && country.regions[0]
@@ -171,6 +184,7 @@ export function EditResearchGeographicDataCard({research, setResearch}: EditGeog
                                                 <FormLabel className={"text-sm"}>Região</FormLabel>
                                                 <Skeleton isLoaded={!!research.country?.regions.length}>
                                                     <Select
+                                                        value={research.region?.id}
                                                         onChange={e => {
                                                             const region = research.country?.regions.find(r => r.id === e.target.value)
                                                             const province = region?.provinces && region.provinces[0]
@@ -204,6 +218,8 @@ export function EditResearchGeographicDataCard({research, setResearch}: EditGeog
                                                 <FormLabel className={"text-sm"}>País</FormLabel>
                                                 <Skeleton isLoaded={!!countries.length}>
                                                     <Select
+                                                        name={"country"}
+                                                        value={research.country?.id}
                                                         onChange={e => {
                                                             const country = countries?.find(c => c.id === e.target.value)
                                                             const region = country?.regions && country.regions[0]
@@ -221,7 +237,8 @@ export function EditResearchGeographicDataCard({research, setResearch}: EditGeog
                                                         {
                                                             countries?.map((country: Country) => {
                                                                 return (
-                                                                    <option value={country.id} key={country.id}>
+                                                                    <option
+                                                                        value={country.id} key={country.id}>
                                                                         {country.name}
                                                                     </option>
                                                                 )
@@ -234,6 +251,7 @@ export function EditResearchGeographicDataCard({research, setResearch}: EditGeog
                                                 <FormLabel className={"text-sm"}>Região</FormLabel>
                                                 <Skeleton isLoaded={!!research.country?.regions.length}>
                                                     <Select
+                                                        value={research.region?.id}
                                                         onChange={e => {
                                                             const region = research.country?.regions.find(r => r.id === e.target.value)
                                                             const province = region?.provinces && region.provinces[0]
@@ -258,9 +276,10 @@ export function EditResearchGeographicDataCard({research, setResearch}: EditGeog
                                             </div>
                                             <div>
                                                 <FormLabel className={"text-sm"}>Provincia</FormLabel>
-                                                <Skeleton isLoaded={!!research.region?.provinces.length}>
+                                                <Skeleton
+                                                    isLoaded={!!research.region?.provinces?.length || !!research.province}>
                                                     <Select
-                                                        defaultValue={research.province?.id}
+                                                        value={research.province?.id}
                                                         onChange={e => {
                                                             setResearch({
                                                                 ...research,

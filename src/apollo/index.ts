@@ -1114,6 +1114,11 @@ export const LIST_RESEARCHES_QUERY = gql`
             endDate
             visibility
             countries
+            region {
+                id
+                name
+                code
+            }
             province {
                 id
                 name
