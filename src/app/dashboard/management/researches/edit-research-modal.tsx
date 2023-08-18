@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 
 import {AiOutlineFilePdf} from "react-icons/ai";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useMemo, useState} from "react";
 import {Research,} from "@/models";
 import {EditResearchDataCard} from "@/app/dashboard/management/researches/cards/edit-research-data-card";
 import {
@@ -24,6 +24,8 @@ import {EditResearchFilesCard} from "@/app/dashboard/management/researches/cards
 import Link from "next/link";
 import {EditResearchAgreementsCard} from "@/app/dashboard/management/researches/cards/edit-research-agreements-card";
 import {ResearchDangerZoneCard} from "@/app/dashboard/management/researches/cards/research-danger-zone-card";
+import {useLazyQuery} from "@apollo/client";
+import {HAS_APPROVAL_QUERY} from "@/apollo";
 
 export interface EditResearchModalProps extends UseModalProps {
     research?: Research | null
@@ -31,14 +33,23 @@ export interface EditResearchModalProps extends UseModalProps {
 
 export function EditResearchModal({isOpen, onClose, research}: EditResearchModalProps) {
     const [researchData, setResearchData] = useState(research || {} as Research)
+    const [getResearchApproval] = useLazyQuery(HAS_APPROVAL_QUERY)
+    const [hasApproval, setHasApproval] = useState(false);
 
     useEffect(() => {
         if (isOpen && research) {
             setResearchData(research)
+            getResearchApproval({
+                variables: {
+                    id: research?.id
+                }
+            }).then(({data}) => {
+                setHasApproval(!!data?.getResearchApproval)
+            })
         } else {
             setResearchData({} as Research)
         }
-    }, [research, isOpen])
+    }, [research, isOpen, getResearchApproval])
 
     return (
         <>
@@ -67,16 +78,25 @@ export function EditResearchModal({isOpen, onClose, research}: EditResearchModal
                                     Imprimir Relatório
                                 </Button>
                             </Link>
-                            <Link href={`/printing/${research?.id}/mta`} target={"_blank"}>
-                                <Button colorScheme={"teal"} variant={"outline"} rightIcon={<AiOutlineFilePdf/>}>
+                            <Button
+                                isDisabled={!hasApproval}
+                                title={!hasApproval ? "Esta pesquisa ainda não foi aprovada" : "Imprimir Acordo de Transferência de Material"}
+                                colorScheme={"teal"} variant={"outline"} rightIcon={<AiOutlineFilePdf/>}>
+                                <Link href={hasApproval ? `/printing/${research?.id}/mta` : "#"}
+                                      target={hasApproval ? "_blank" : undefined}>
                                     Imprimir MTA
-                                </Button>
-                            </Link>
-                            <Link href={`/printing/${research?.id}/cr`} target={"_blank"}>
-                                <Button colorScheme={"teal"} variant={"outline"} rightIcon={<AiOutlineFilePdf/>}>
+                                </Link>
+                            </Button>
+                            <Button
+                                isDisabled={!hasApproval}
+                                title={!hasApproval ? "Esta pesquisa ainda não foi aprovada" : "Imprimir Confirmação de registro"}
+                                colorScheme={"teal"} variant={"outline"} rightIcon={<AiOutlineFilePdf/>}>
+                                <Link
+                                    href={hasApproval ? `/printing/${research?.id}/cr` : "#"}
+                                    target={hasApproval ? "_blank" : undefined}>
                                     Imprimir CR
-                                </Button>
-                            </Link>
+                                </Link>
+                            </Button>
                         </div>
                     </ModalFooter>
                 </ModalContent>

@@ -21,9 +21,9 @@ import {
     useDisclosure
 } from "@chakra-ui/react";
 
-import {LIST_RESEARCHES_QUERY, UPDATE_RESEARCH_STATUS_MUTATION} from "@/apollo";
+import {LIST_RESEARCHES_QUERY} from "@/apollo";
 import {useEffect, useMemo, useState} from "react";
-import {useMutation, useQuery} from "@apollo/client";
+import {useQuery} from "@apollo/client";
 import {Research} from "@/models";
 
 export default function ResearchManagement() {

@@ -1460,3 +1460,11 @@ export const UPDATE_RESEARCH_STATUS_MUTATION = gql`
         }
     }
 `
+
+export const HAS_APPROVAL_QUERY = gql`
+    query GetResearchApproval($id: String!) {
+        getResearchApproval(id: $id) {
+            code
+        }
+    }
+`
