@@ -40,6 +40,7 @@ export function CreateResearchModal({isOpen, onClose}: UseModalProps) {
 
     const handleCreateResearchClick = useCallback(async () => {
         try {
+            console.log(research)
 
             const result = await createResearchMutation({
                 variables: {

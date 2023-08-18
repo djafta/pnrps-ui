@@ -211,6 +211,7 @@ export function CreateResearchDataCard({research, setResearch}: ResearchDataProp
                                             return (
                                                 <option
                                                     key={subtype.id}
+                                                    value={subtype.id}
                                                 >
                                                     {subtype.name}
                                                 </option>

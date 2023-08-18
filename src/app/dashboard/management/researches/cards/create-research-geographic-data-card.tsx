@@ -29,7 +29,7 @@ export function CreateResearchGeographicDataCard({research, setResearch}: Geogra
     });
 
     const countries = useMemo(() => {
-        return (listResearchCountriesQuery.data.listCountries || []) as Country[]
+        return (listResearchCountriesQuery.data?.listCountries || []) as Country[]
     }, [listResearchCountriesQuery])
 
     useEffect(() => {
