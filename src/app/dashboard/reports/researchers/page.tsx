@@ -4,67 +4,56 @@ import {
     Card,
     CardBody,
     CardHeader,
+    FormControl,
+    FormLabel,
     Heading,
     Select,
-    Skeleton, SkeletonCircle,
+    Skeleton,
+    SkeletonCircle,
     SkeletonText,
 } from "@chakra-ui/react";
-
-interface Research {
-
-}
 
 export default function Page() {
     return (
         <>
-            <main className={"relative pt-14 flex flex-col gap-10 bg-white"}>
+            <main className={"relative pt-14 flex flex-col gap-10 bg-white lg:ps-16"}>
                 <div className={"flex flex-col w-full gap-10"}>
-                    <div className={"p-2 gap-4 grid grid-rows-3 lg:grid-cols-3 lg:grid-rows-none"}>
+                    <div className={"p-2 gap-4 grid"}>
                         <Card className={"w-full gap-4 p-2"}>
-                            <CardHeader>
-                                <Heading size={"md"}>Pesquisadores por sexo</Heading>
+                            <CardHeader className={"flex justify-between"}>
+                                <Heading size={"md"}>Filtrar pesquisadores</Heading>
+                                <Skeleton isLoaded={true} className={"w-fit"}>
+                                    <Select>
+                                        <option>2023</option>
+                                        <option>2024</option>
+                                    </Select>
+                                </Skeleton>
                             </CardHeader>
                             <CardBody>
-                                <div className={"flex flex-col gap-4 h-full"}>
-                                    <SkeletonText width={"100px"} noOfLines={1}
-                                                  skeletonHeight={4}></SkeletonText>
-                                    <div
-                                        className={"h-full flex flex-col gap-4 lg:flex-row justify-center items-center"}>
-                                        <SkeletonCircle isLoaded={false} className={"w-[200px] h-[200px]"}>
+                                <div className={"flex flex-col gap-4 h-full lg:flex-row"}>
+                                    <div className={"flex flex-col gap-2 md:flex-row w-full"}>
+                                        <FormControl>
+                                            <FormLabel>Sexo</FormLabel>
+                                            <Select>
 
-                                        </SkeletonCircle>
-                                    </div>
-                                </div>
-                            </CardBody>
-                        </Card>
-                        <Card className={"w-full gap-4 p-2"}>
-                            <CardHeader>
-                                <Heading size={"md"}>Pesquisadores por faixa etaria</Heading>
-                            </CardHeader>
-                            <CardBody>
-                                <div className={"flex flex-col gap-4 h-full"}>
-                                    <SkeletonText width={"100px"} noOfLines={1}
-                                                  skeletonHeight={4}></SkeletonText>
-                                    <div
-                                        className={"h-full flex flex-col gap-4 lg:flex-row justify-center items-center"}>
-                                        <SkeletonCircle isLoaded={false} className={"w-[200px] h-[200px]"}>
+                                            </Select>
+                                        </FormControl>
+                                        <FormControl>
+                                            <FormLabel>Faixa etária</FormLabel>
+                                            <Select>
 
-                                        </SkeletonCircle>
+                                            </Select>
+                                        </FormControl>
+                                        <FormControl>
+                                            <FormLabel>Nível académico</FormLabel>
+                                            <Select>
+
+                                            </Select>
+                                        </FormControl>
                                     </div>
-                                </div>
-                            </CardBody>
-                        </Card>
-                        <Card className={"w-full gap-4 p-2"}>
-                            <CardHeader>
-                                <Heading size={"md"}>Pesquisas por nivel academico</Heading>
-                            </CardHeader>
-                            <CardBody>
-                                <div className={"flex flex-col gap-4 h-full"}>
-                                    <SkeletonText width={"100px"} noOfLines={1}
-                                                  skeletonHeight={4}></SkeletonText>
                                     <div
-                                        className={"h-full flex flex-col gap-4 lg:flex-row justify-center items-center"}>
-                                        <SkeletonCircle isLoaded={false} className={"w-[200px] h-[200px]"}>
+                                        className={"h-full flex flex-col gap-4 lg:flex-row justify-center items-center w-full"}>
+                                        <SkeletonCircle isLoaded={false} className={"w-[300px] h-[300px]"}>
 
                                         </SkeletonCircle>
                                     </div>
@@ -74,13 +63,17 @@ export default function Page() {
                     </div>
                     <div className={"flex w-full p-2"}>
                         <Card className={"w-full gap-4 p-2"}>
-                            <CardHeader>
+                            <CardHeader className={"flex w-full justify-between"}>
                                 <Heading size={"md"}>Pesquisadores cadastrados</Heading>
+                                <Skeleton isLoaded={true} className={"w-fit"}>
+                                    <Select>
+                                        <option>2023</option>
+                                        <option>2024</option>
+                                    </Select>
+                                </Skeleton>
                             </CardHeader>
                             <CardBody>
                                 <div className={"flex flex-col gap-4"}>
-                                    <SkeletonText width={"100px"} noOfLines={1}
-                                                  skeletonHeight={4}></SkeletonText>
                                     <div className={"flex flex-col gap-4 lg:flex-row"}>
                                         <Skeleton isLoaded={false} className={"w-full h-[400px]"}>
 

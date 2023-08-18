@@ -17,7 +17,7 @@ interface Research {
 export default function Page() {
     return (
         <>
-            <main className={"relative pt-14 flex flex-col gap-10 bg-white"}>
+            <main className={"relative pt-14 flex flex-col gap-10 bg-white lg:ps-16"}>
                 <div className={"flex flex-col w-full gap-10"}>
                     <div className={"flex w-full p-2"}>
                         <Card className={"w-full gap-4 p-2"}>
