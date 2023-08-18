@@ -51,7 +51,7 @@ export default function ResearchPrint({params}: { params: { research: string, do
                                     <Text>
                                         É autorizada a transferência de amostras biológicas, referente ao
                                         projecto/protocolo
-                                        intitulado `&quot;<Text>{research.title}</Text>`&quot; com
+                                        intitulado &quot;<Text>{research.title}</Text>&quot; com
                                         registro <Text>{research.approval.code} </Text>
                                         nas quantidades abaixo descritas:
                                     </Text>
