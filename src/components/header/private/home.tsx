@@ -7,7 +7,7 @@ import {useAuth} from "@/hooks/auth";
 export function Home() {
     const {isAuthorized} = useAuth()
 
-    if (isAuthorized("read:research:list")) {
+    if (isAuthorized("read:research:list", "read:research:self", "create:research:self")) {
         return (
             <Link href={"/dashboard/"}
                   className={"flex items-center py-2 gap-6 hover:bg-slate-200 overflow-hidden whitespace-nowrap border-b-[1px] border-b-gray-200"}>
