@@ -21,9 +21,9 @@ import {
     useDisclosure
 } from "@chakra-ui/react";
 
-import {LIST_RESEARCHES_QUERY} from "@/apollo";
+import {LIST_RESEARCHES_QUERY, UPDATE_RESEARCH_STATUS_MUTATION} from "@/apollo";
 import {useEffect, useMemo, useState} from "react";
-import {useQuery} from "@apollo/client";
+import {useMutation, useQuery} from "@apollo/client";
 import {Research} from "@/models";
 
 export default function ResearchManagement() {
@@ -120,7 +120,7 @@ export default function ResearchManagement() {
                                             <Td>{research.title}</Td>
                                             <Td>{research.subtype?.name}</Td>
                                             <Td>{research.subfield?.name}</Td>
-                                            <Td>{research.acronym}</Td>
+                                            <Td>{research.status === "DUPLICATE" ? "Por rever" : research.status === "UNAUTHORIZED" ? "Sumetida" : "Autorizada"}</Td>
                                         </Tr>
                                     )
                                 })}

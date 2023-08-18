@@ -15,7 +15,8 @@ import React, {Dispatch, SetStateAction} from "react";
 import {WarningAlertDialog} from "@/components/warning-alert-dialog";
 import {Research} from "@/models";
 import {useMutation} from "@apollo/client";
-import {LIST_RESEARCHES_QUERY, UPDATE_RESEARCH_MUTATION} from "@/apollo";
+import {LIST_RESEARCHES_QUERY, UPDATE_RESEARCH_MUTATION, UPDATE_RESEARCH_STATUS_MUTATION} from "@/apollo";
+import {useAuth} from "@/hooks/auth";
 
 export interface ResearchDangerZoneCardProps {
     readonly research: Research
@@ -28,6 +29,10 @@ export function ResearchDangerZoneCard({research, setResearch}: ResearchDangerZo
     const [updateResearchMutation, updateResearchMutationResult] = useMutation(UPDATE_RESEARCH_MUTATION, {
         refetchQueries: [LIST_RESEARCHES_QUERY]
     });
+    const [updateResearchStatusMutation] = useMutation(UPDATE_RESEARCH_STATUS_MUTATION, {
+        refetchQueries: [LIST_RESEARCHES_QUERY]
+    })
+    const {isAuthorized} = useAuth();
 
     return (
         <>
@@ -93,6 +98,34 @@ export function ResearchDangerZoneCard({research, setResearch}: ResearchDangerZo
                                     </Switch>
                                 </Td>
                             </Tr>
+                            {
+                                isAuthorized("read:research:list") &&
+                                <Tr>
+                                    <Td>
+                                        Torna a pesquisa autorizada ou desautorizada
+                                    </Td>
+                                    <Td>
+                                        <Switch
+                                            isDisabled={research.status === "DUPLICATE"}
+                                            isChecked={research.status === "AUTHORIZED"}
+                                            onChange={async () => {
+                                                await updateResearchStatusMutation({
+                                                    variables: {
+                                                        input: {
+                                                            id: research.id,
+                                                            status: research.status === "UNAUTHORIZED" ? "AUTHORIZED" : "UNAUTHORIZED"
+                                                        }
+                                                    }
+                                                })
+                                            }}
+                                            width={"full"}
+                                            colorScheme={"teal"}
+                                            variant={"outline"}>
+                                            Pesquisa Autorizada
+                                        </Switch>
+                                    </Td>
+                                </Tr>
+                            }
                             <Tr>
                                 <Td>
                                     Elimina a pesquisa por completo

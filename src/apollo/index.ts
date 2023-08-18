@@ -1114,6 +1114,7 @@ export const LIST_RESEARCHES_QUERY = gql`
             endDate
             visibility
             countries
+            status
             region {
                 id
                 name
@@ -1377,6 +1378,7 @@ export const GET_RESEARCH_BY_ID_QUERY = gql`
             endDate
             visibility
             countries
+            status
             province {
                 id
                 name
@@ -1447,6 +1449,14 @@ export const GET_DEFAULT_ORGANIZATION_TYPE_QUERY = gql`
             id
             name
             description
+        }
+    }
+`
+
+export const UPDATE_RESEARCH_STATUS_MUTATION = gql`
+    mutation UpdateResearchStatus($input: UpdateResearchStatusInput!) {
+        updateResearchStatus(input: $input) {
+            message
         }
     }
 `

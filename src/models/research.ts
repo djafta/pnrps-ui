@@ -43,4 +43,5 @@ export interface Research {
     financings: Financing[]
     approval: ResearchApproval
     visibility: "PRIVATE" | "PUBLIC"
+    status: "AUTHORIZED" | "UNAUTHORIZED" | "DUPLICATE"
 }
