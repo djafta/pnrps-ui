@@ -1265,7 +1265,7 @@ export const GET_RESEARCH_REPORT_QUERY = gql`
 `
 
 export const GET_RESEARCH_RC_QUERY = gql`
-    query GetRCReport($id: String!) {
+    query getResearchRC($id: String!) {
         getResearchRC(id: $id) {
             id
             code

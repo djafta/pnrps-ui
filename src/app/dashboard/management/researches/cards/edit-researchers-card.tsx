@@ -101,6 +101,7 @@ export function EditResearchersCard({research, setResearch}: ResearchersCardProp
                     }
                 }
             })
+
             toast({
                 title: "Convite enviado!",
                 description: `Um covinte foi enviado para "${researcher.email}"`,
@@ -347,7 +348,7 @@ export function EditResearchersCard({research, setResearch}: ResearchersCardProp
                                                         {
                                                             roles.map((role => {
                                                                 return (
-                                                                    <option key={role.id}>{role.name}</option>
+                                                                    <option key={role.id} value={role.id}>{role.name}</option>
                                                                 )
                                                             }))
                                                         }
