@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react";
+import React, {useEffect} from "react";
 import {BiDownload} from "react-icons/bi";
 import {PublicHeader} from "@/components/header/public";
 
@@ -39,9 +39,11 @@ export default function Home() {
     const {user} = useAuth();
     const router = useRouter();
 
-    if (user) {
-        router.push("/dashboard")
-    }
+    useEffect(() => {
+        if (user) {
+            router.push("/dashboard")
+        }
+    }, [user, router])
 
     function handleResearchRowClick(research: Research | undefined) {
         onOpen()

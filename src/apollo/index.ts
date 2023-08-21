@@ -127,6 +127,10 @@ export const GET_USER_SELF_QUERY = gql`
             id
             features
             verified
+            createdAt
+            updatedAt
+            birthDate
+            sex
         }
     }
 `

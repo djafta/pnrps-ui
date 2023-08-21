@@ -34,13 +34,14 @@ export default function Page() {
                                     <div className={"flex flex-col gap-2 md:flex-row w-full"}>
                                         <FormControl>
                                             <FormLabel>Sexo</FormLabel>
-                                            <Select>
-
+                                            <Select name={"sex"}>
+                                                <option value={"M"}>Masculino</option>
+                                                <option value={"F"}>Femenino</option>
                                             </Select>
                                         </FormControl>
                                         <FormControl>
                                             <FormLabel>Faixa etária</FormLabel>
-                                            <Select>
+                                            <Select name={""}>
 
                                             </Select>
                                         </FormControl>

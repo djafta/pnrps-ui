@@ -20,6 +20,7 @@ import {Home} from "@/components/header/private/home";
 import {Management} from "@/components/header/private/management";
 import {Report} from "@/components/header/private/report";
 import {Settings} from "@/components/header/private/settings";
+import {Profile} from "@/components/header/private/profile";
 
 export function PrivateHeader() {
     const [expanded, setExpanded] = useState(false);
@@ -62,7 +63,9 @@ export function PrivateHeader() {
                                     variant={"outline"}/>
                         <MenuList>
                             <MenuItem>
-                                {messages.private.header.menu.items[0]}
+                                <Link className={"w-full h-full"} href={"/dashboard/profile"}>
+                                    {messages.private.header.menu.items[0]}
+                                </Link>
                             </MenuItem>
                             <MenuItem>
                                 <Link className={"w-full h-full"} href={"/auth?mode=signout"}>
@@ -87,6 +90,7 @@ export function PrivateHeader() {
                             <Report expanded={expanded}/>
                             <Settings expanded={expanded}/>
                         </Accordion>
+                        <Profile/>
                     </div>
                 </div>
             </div>
