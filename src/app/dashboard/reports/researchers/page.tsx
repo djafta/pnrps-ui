@@ -94,6 +94,7 @@ export default function Page() {
                     background: [{ // Track for Move
                         outerRadius: '112%',
                         innerRadius: '88%',
+                        //@ts-ignore
                         backgroundColor: Highcharts.color(Highcharts.getOptions().colors[0])
                             .setOpacity(0.3)
                             .get(),
@@ -101,6 +102,7 @@ export default function Page() {
                     }, { // Track for Exercise
                         outerRadius: '87%',
                         innerRadius: '63%',
+                        //@ts-ignore
                         backgroundColor: Highcharts.color(Highcharts.getOptions().colors[1])
                             .setOpacity(0.3)
                             .get(),
@@ -108,6 +110,7 @@ export default function Page() {
                     }, { // Track for Stand
                         outerRadius: '62%',
                         innerRadius: '38%',
+                        //@ts-ignore
                         backgroundColor: Highcharts.color(Highcharts.getOptions().colors[2])
                             .setOpacity(0.3)
                             .get(),
@@ -136,6 +139,7 @@ export default function Page() {
                 series: [{
                     name: {M: "Sexo Masculino", F: "Sexo Feminino"}[filter.sex],
                     data: [{
+                        //@ts-ignore
                         color: Highcharts.getOptions().colors[0],
                         radius: '112%',
                         innerRadius: '88%',
@@ -144,6 +148,7 @@ export default function Page() {
                 }, {
                     name: '20-25 Anos',
                     data: [{
+                        //@ts-ignore
                         color: Highcharts.getOptions().colors[1],
                         radius: '87%',
                         innerRadius: '63%',
@@ -152,6 +157,7 @@ export default function Page() {
                 }, {
                     name: 'Licenciados',
                     data: [{
+                        //@ts-ignore
                         color: Highcharts.getOptions().colors[2],
                         radius: '62%',
                         innerRadius: '38%',
@@ -165,6 +171,7 @@ export default function Page() {
             // Data retrieved from https://gs.statcounter.com/browser-market-share#monthly-202201-202201-bar
 
 // Create the chart
+            //@ts-ignore
             Highcharts.chart('all_researchers', {
                 chart: {
                     type: 'column'
