@@ -1,5 +1,22 @@
 import {gql} from "@apollo/client";
 
+export const GET_RESEARCHERS_BY_YEAR = gql`
+    query GetResearchersByYear($year: Float!) {
+        getResearchersByYear(year: $year) {
+            firstName
+            lastName
+            email
+            id
+            features
+            verified
+            createdAt
+            updatedAt
+            birthDate
+            sex
+        }
+    }
+`
+
 export const GET_DEFAULT_RESEARCHER_ROLE_QUERY = gql`
     query Query {
         getDefaultResearcherRole {
