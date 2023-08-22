@@ -1,10 +1,8 @@
 import {
     Badge,
     Box,
-    Button,
     Card,
     CardBody,
-    CardFooter,
     CardHeader,
     FormControl,
     FormLabel,
@@ -13,18 +11,16 @@ import {
     Input,
     Skeleton,
     Text,
-    useToast
 } from "@chakra-ui/react";
-import React, {Dispatch, SetStateAction, useCallback, useEffect, useState} from "react";
+import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {Organization, Research, ResearchApproval} from "@/models";
 import {Autocomplete, Option} from "chakra-ui-simple-autocomplete";
-import {useLazyQuery, useMutation, useQuery} from "@apollo/client";
+import {useLazyQuery, useQuery} from "@apollo/client";
 import {
-    CREATE_RESEARCH_APPROVAL_MUTATION,
     GET_RESEARCH_APPROVAL_QUERY,
     LIST_ETHIC_COMMITTEES,
 } from "@/apollo";
-import {CloseIcon, ExternalLinkIcon} from "@chakra-ui/icons";
+import {ExternalLinkIcon} from "@chakra-ui/icons";
 import {useBase64} from "@/hooks/base64";
 
 export interface ResearchApprovalCardProps {
@@ -32,8 +28,7 @@ export interface ResearchApprovalCardProps {
     readonly setResearch: Dispatch<SetStateAction<Research>>
 }
 
-export function EditResearchApprovalCard({research, setResearch}: ResearchApprovalCardProps) {
-    const toast = useToast();
+export function ViewResearchApprovalCard({research, setResearch}: ResearchApprovalCardProps) {
     const [approval, setApproval] = useState<ResearchApproval>({} as ResearchApproval);
     const [result, setResult] = useState<Option[]>([]);
     const [options, setOptions] = useState<Option[]>([]);
@@ -41,41 +36,9 @@ export function EditResearchApprovalCard({research, setResearch}: ResearchApprov
     const listEtcCommittees = useQuery(LIST_ETHIC_COMMITTEES, {
         pollInterval: 1000 * 10
     });
-    const [createResearchApprovalMutation, createResearchApprovalMutationResult] = useMutation(CREATE_RESEARCH_APPROVAL_MUTATION, {
-        refetchQueries: [GET_RESEARCH_APPROVAL_QUERY]
-    })
 
-    const {toBase64, fromBase64} = useBase64();
+    const {fromBase64} = useBase64();
 
-    const handleSaveButtonClick = useCallback(async () => {
-        await createResearchApprovalMutation({
-            variables: {
-                input: {
-                    id: approval.id,
-                    code: approval.code,
-                    researchId: research.id,
-                    committees: approval.committees.map((committee) => {
-                        return {
-                            organizationId: committee.id
-                        }
-                    }),
-                    file: {
-                        name: approval.file?.name,
-                        data: approval.file?.data,
-                        mime: approval.file?.mime
-                    }
-                }
-            }
-        })
-        toast({
-            title: "Pesquisa Atualizada",
-            description: `Aprovação ética da pesquisa "${research.title}" salva com sucesso.`,
-            status: "success",
-            isClosable: true,
-            position: "top",
-            colorScheme: "teal",
-        })
-    }, [approval, research, createResearchApprovalMutation, toast])
 
     useEffect(() => {
         if (listEtcCommittees.data?.listEthicCommittees) {
@@ -124,38 +87,16 @@ export function EditResearchApprovalCard({research, setResearch}: ResearchApprov
                             <div>
                                 <FormLabel className={"text-sm"}>Código de aprovação</FormLabel>
                                 <Input
+                                    isReadOnly={true}
                                     defaultValue={approval.code}
-                                    onChange={(e) => {
-                                        setApproval(approval => {
-                                            return {
-                                                ...approval,
-                                                code: e.target.value
-                                            }
-                                        })
-                                    }} type={"text"}/>
+                                    type={"text"}/>
                             </div>
                             <FormControl>
                                 <FormLabel className={"text-sm"}>Documento Aprovação ética</FormLabel>
                                 <div className={"relative z-50 flex border rounded-lg overflow-hidden"}>
                                     <Input
+                                        disabled={true}
                                         border={"none"}
-                                        onChange={async (e) => {
-                                            const file = e.target.files?.item(0)
-                                            if (file) {
-                                                const data = await toBase64(file);
-
-                                                setApproval(approval => {
-                                                    return {
-                                                        ...approval,
-                                                        file: {
-                                                            data,
-                                                            name: file.name.substring(0, file.name.lastIndexOf(".")),
-                                                            mime: file.name.split(".").pop() as string
-                                                        }
-                                                    }
-                                                })
-                                            }
-                                        }}
                                         appearance={"none"}
                                         className={"text-transparent bg-transparent"}
                                         type={"file"}
@@ -181,30 +122,18 @@ export function EditResearchApprovalCard({research, setResearch}: ResearchApprov
                             <Skeleton isLoaded={!!options.length}>
                                 <Box className={"border rounded flex w-full flex-col p-2 focus-within:border-blue-600"}>
                                     <Autocomplete
+                                        isReadOnly={true}
                                         className={"outline-none w-full flex flex-col"}
                                         renderBadge={(option) => {
                                             return (
                                                 <Badge className={"flex items-center m-1 gap-2 px-3 py-2 rounded-2xl"}>
                                                     {option.label}
-                                                    <CloseIcon width={"10px"}/>
                                                 </Badge>
                                             )
                                         }}
                                         options={options}
                                         result={result}
-                                        setResult={(options: Option[]) => {
-                                            setApproval(approval => {
-                                                return {
-                                                    ...approval,
-                                                    committees: options.map(({value, label}) => {
-                                                        return {
-                                                            id: value,
-                                                            name: label
-                                                        } as Organization
-                                                    })
-                                                }
-                                            })
-                                            setResult(options);
+                                        setResult={() => {
                                         }}
                                     />
                                 </Box>
@@ -213,14 +142,6 @@ export function EditResearchApprovalCard({research, setResearch}: ResearchApprov
                     </div>
                 </div>
             </CardBody>
-            <CardFooter>
-                <div className={"flex justify-end w-full"}>
-                    <Button
-                        onClick={handleSaveButtonClick}
-                        isLoading={createResearchApprovalMutationResult.loading}
-                        colorScheme={"teal"}>Guardar</Button>
-                </div>
-            </CardFooter>
         </Card>
     )
 }

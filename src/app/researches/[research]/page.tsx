@@ -9,21 +9,14 @@ import React, {useEffect, useState} from "react";
 import {useQuery} from "@apollo/client";
 import {Research} from "@/models";
 
-import {
-    EditResearchGeographicDataCard
-} from "@/app/dashboard/management/researches/cards/edit-research-geographic-data-card";
 import {EditResearchAgreementsCard} from "@/app/dashboard/management/researches/cards/edit-research-agreements-card";
-import {EditResearchApprovalCard} from "@/app/dashboard/management/researches/cards/edit-research-approval-card";
-import {ResearchDangerZoneCard} from "@/app/dashboard/management/researches/cards/research-danger-zone-card";
-import {EditResearchFilesCard} from "@/app/dashboard/management/researches/cards/edit-research-files-card";
-import {EditResearchDataCard} from "@/app/dashboard/management/researches/cards/edit-research-data-card";
-import {EditResearchersCard} from "@/app/dashboard/management/researches/cards/edit-researchers-card";
-import {EditFinancingCard} from "@/app/dashboard/management/researches/cards/edit-financing-card";
 import {AiOutlineFilePdf} from "react-icons/ai";
 import {ViewResearchDataCard} from "@/app/researches/cards/view-research-data-card";
 import {ViewResearchGeographicDataCard} from "@/app/researches/cards/view-research-geographic-data-card";
 import {ViewResearchersCard} from "@/app/researches/cards/view-researchers-card";
 import {ViewFinancingCard} from "@/app/researches/cards/view-financing-card";
+import {ViewResearchApprovalCard} from "@/app/researches/cards/view-research-approval-card";
+import {ViewResearchFilesCard} from "@/app/researches/cards/view-research-files-card";
 
 
 export default function ResearchManagement({params}: { params: { research: string } }) {
@@ -53,13 +46,12 @@ export default function ResearchManagement({params}: { params: { research: strin
                         <ViewResearchGeographicDataCard research={research} setResearch={setResearch}/>
                         <ViewResearchersCard research={research} setResearch={setResearch}/>
                         <ViewFinancingCard research={research} setResearch={setResearch}/>
-                        <EditResearchApprovalCard research={research} setResearch={setResearch}/>
-                        <EditResearchFilesCard research={research} setResearch={setResearch}/>
+                        <ViewResearchApprovalCard research={research} setResearch={setResearch}/>
+                        <ViewResearchFilesCard research={research} setResearch={setResearch}/>
                         <EditResearchAgreementsCard research={research}/>
-                        <ResearchDangerZoneCard research={research} setResearch={setResearch}/>
                     </div>
                     <div>
-                        <div className={"w-full flex flex-col gap-2 sm:flex-row sm:justify-end px-6"}>
+                        <div className={"w-full flex flex-col gap-2 sm:flex-row sm:justify-end px-6 py-4"}>
                             <Link href={`/printing/${research?.id}/report`} target={"_blank"}>
                                 <Button width={"full"} colorScheme={"teal"} variant={"outline"}
                                         rightIcon={<AiOutlineFilePdf/>}>
