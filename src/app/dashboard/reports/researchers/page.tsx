@@ -4,24 +4,17 @@ import {
     Card,
     CardBody,
     CardHeader,
-    FormControl,
-    FormLabel,
     Heading,
     Select,
     Skeleton,
     SkeletonCircle,
-    SkeletonText,
 } from "@chakra-ui/react";
-import {useLazyQuery} from "@apollo/client";
+
 import {GET_RESEARCHERS_BY_YEAR} from "@/apollo";
-import ChartModuleMore from 'highcharts/highcharts-more.js';
-import HCSoldGauge from 'highcharts/modules/solid-gauge';
-import * as Highcharts from 'highcharts'
+import {useLazyQuery} from "@apollo/client";
+import Highcharts from 'highcharts'
 
 import {User} from "@/models";
-
-ChartModuleMore(Highcharts);
-HCSoldGauge(Highcharts);
 
 export default function Page() {
     const [getResearchersByYearMutation, getResearchersByYearMutationResult] = useLazyQuery(GET_RESEARCHERS_BY_YEAR, {
@@ -57,120 +50,95 @@ export default function Page() {
 
     useEffect(() => {
         if (window.document.getElementById("filtered_researchers")) {
+            const series: any = [
+                {
+                    data: [
+                        {
+                            name: "Masculino",
+                            y: researchers.filter(r => r.sex === 'M').length
+                        }
+                    ]
+                },
+                {
+                    data: [
+                        {
+                            name: "Feminino",
+                            y: researchers.filter(r => r.sex === 'F').length
+                        }
+                    ]
+                }
+            ]
+
             // @ts-ignore
             Highcharts.chart('filtered_researchers', {
                 chart: {
-                    type: 'solidgauge',
-                    height: '100%',
+                    type: 'column',
+                    inverted: true,
+                    polar: true
                 },
-
                 title: {
-                    text: 'Pesquisadores',
-                    style: {
-                        fontSize: '24px'
-                    }
+                    text: '',
+                    align: 'left'
                 },
-
-                tooltip: {
-                    borderWidth: 0,
-                    backgroundColor: 'none',
-                    shadow: false,
-                    style: {
-                        fontSize: '16px'
-                    },
-                    valueSuffix: '%',
-                    pointFormat: '{series.name}<br><span style="font-size:2em; color: {point.color}; font-weight: bold">{point.y}</span>',
-                    positioner: function (labelWidth) {
-                        return {
-                            x: (this.chart.chartWidth - labelWidth) / 2,
-                            y: (this.chart.plotHeight / 2) + 15
-                        };
-                    }
-                },
-
                 pane: {
-                    startAngle: 0,
-                    endAngle: 360,
-                    background: [{ // Track for Move
-                        outerRadius: '112%',
-                        innerRadius: '88%',
-                        //@ts-ignore
-                        backgroundColor: Highcharts.color(Highcharts.getOptions().colors[0])
-                            .setOpacity(0.3)
-                            .get(),
-                        borderWidth: 0
-                    }, { // Track for Exercise
-                        outerRadius: '87%',
-                        innerRadius: '63%',
-                        //@ts-ignore
-                        backgroundColor: Highcharts.color(Highcharts.getOptions().colors[1])
-                            .setOpacity(0.3)
-                            .get(),
-                        borderWidth: 0
-                    }, { // Track for Stand
-                        outerRadius: '62%',
-                        innerRadius: '38%',
-                        //@ts-ignore
-                        backgroundColor: Highcharts.color(Highcharts.getOptions().colors[2])
-                            .setOpacity(0.3)
-                            .get(),
-                        borderWidth: 0
-                    }]
+                    size: '85%',
+                    innerSize: '20%',
+                    endAngle: 270
                 },
-
-                yAxis: {
-                    min: 0,
-                    max: 100,
+                xAxis: {
+                    tickInterval: 1,
+                    labels: {
+                        align: 'right',
+                        useHTML: true,
+                        allowOverlap: true,
+                        step: 1,
+                        y: 3,
+                        style: {
+                            fontSize: '13px'
+                        }
+                    },
                     lineWidth: 0,
-                    tickPositions: []
+                    categories: [
+                        'Sexo <span class="f16"><span id="flag" class="flag no">' +
+                        '</span></span>',
+                        'Faixa etária <span class="f16"><span id="flag" class="flag us">' +
+                        '</span></span>',
+                        'Nível acdémico <span class="f16"><span id="flag" class="flag de">' +
+                        '</span></span>',
+                    ]
                 },
-
+                yAxis: {
+                    crosshair: {
+                        enabled: true,
+                        color: '#333'
+                    },
+                    lineWidth: 0,
+                    tickInterval: researchers.length,
+                    reversedStacks: false,
+                    endOnTick: true,
+                    showLastLabel: true
+                },
                 plotOptions: {
-                    solidgauge: {
-                        dataLabels: {
-                            enabled: false
-                        },
-                        linecap: 'round',
-                        stickyTracking: false,
-                        rounded: true
-                    }
+                    column: {
+                        stacking: 'normal',
+                        borderWidth: 0,
+                        pointPadding: 0,
+                        groupPadding: 0.15
+                    },
                 },
-
-                series: [{
-                    name: {M: "Sexo Masculino", F: "Sexo Feminino"}[filter.sex],
-                    data: [{
-                        //@ts-ignore
-                        color: Highcharts.getOptions().colors[0],
-                        radius: '112%',
-                        innerRadius: '88%',
-                        y: Number((researchers.filter((r => r.sex === filter.sex)).length / researchers.length * 100).toPrecision(2))
-                    }]
-                }, {
-                    name: '20-25 Anos',
-                    data: [{
-                        //@ts-ignore
-                        color: Highcharts.getOptions().colors[1],
-                        radius: '87%',
-                        innerRadius: '63%',
-                        y: 65
-                    }]
-                }, {
-                    name: 'Licenciados',
-                    data: [{
-                        //@ts-ignore
-                        color: Highcharts.getOptions().colors[2],
-                        radius: '62%',
-                        innerRadius: '38%',
-                        y: 50
-                    }]
-                }]
+                tooltip: {
+                    pointFormat: '<p>Cerca de: <b>{point.percentage:.1f}%</b></p>'
+                },
+                legend: {
+                    enabled: false
+                },
+                series,
             });
         }
 
         if (window.document.getElementById("all_researchers")) {
             // Data retrieved from https://gs.statcounter.com/browser-market-share#monthly-202201-202201-bar
 
-// Create the chart
             //@ts-ignore
             Highcharts.chart('all_researchers', {
                 chart: {
@@ -223,31 +191,6 @@ export default function Page() {
                                 name: 'Sexo Feminino',
                                 y: Number((researchers.filter((r => r.sex === 'F')).length / researchers.length * 100).toPrecision(2)),
                                 drilldown: 'Safari'
-                            },
-                            {
-                                name: 'Licenciados',
-                                y: 4.18,
-                                drilldown: 'Firefox'
-                            },
-                            {
-                                name: 'Mestrados',
-                                y: 4.12,
-                                drilldown: 'Edge'
-                            },
-                            {
-                                name: 'Doutorados',
-                                y: 2.33,
-                                drilldown: 'Opera'
-                            },
-                            {
-                                name: '20-25 Anos',
-                                y: 0.45,
-                                drilldown: 'Internet Explorer'
-                            },
-                            {
-                                name: '25-20 Anos',
-                                y: 1.582,
-                                drilldown: null
                             }
                         ]
                     }
@@ -480,59 +423,12 @@ export default function Page() {
             });
 
         }
-    }, [researchers, filter])
+    }, [researchers])
 
     return (
         <>
             <main className={"relative pt-14 flex flex-col gap-10 bg-white lg:ps-16"}>
                 <div className={"flex flex-col w-full gap-10"}>
-                    <div className={"p-2 gap-4 grid"}>
-                        <Card className={"w-full gap-4 p-2"}>
-                            <CardHeader className={"flex justify-between"}>
-                                <Heading size={"md"}>Filtrar pesquisadores</Heading>
-                                <Skeleton isLoaded={true} className={"w-fit"}>
-                                    <Select name={"year"} onChange={updateFilter} value={filter.year}>
-                                        <option value={2023}>2023</option>
-                                        <option value={2024}>2024</option>
-                                    </Select>
-                                </Skeleton>
-                            </CardHeader>
-                            <CardBody>
-                                <div className={"flex flex-col gap-4 h-full lg:flex-row"}>
-                                    <div className={"flex flex-col gap-2 md:flex-row w-full"}>
-                                        <FormControl>
-                                            <FormLabel>Sexo</FormLabel>
-                                            <Select onChange={updateFilter} value={filter.sex} name={"sex"}>
-                                                <option value={"M"}>Masculino</option>
-                                                <option value={"F"}>Feminino</option>
-                                            </Select>
-                                        </FormControl>
-                                        <FormControl>
-                                            <FormLabel>Faixa etária</FormLabel>
-                                            <Select name={""}>
-
-                                            </Select>
-                                        </FormControl>
-                                        <FormControl>
-                                            <FormLabel>Nível académico</FormLabel>
-                                            <Select>
-
-                                            </Select>
-                                        </FormControl>
-                                    </div>
-                                    <div
-                                        className={"h-full flex flex-col gap-4 lg:flex-row justify-center items-center w-full overflow-hidden"}>
-                                        <SkeletonCircle
-                                            isLoaded={!!researchers.length}
-                                            className={"w-[300px] h-[300px] md:w-[500px] md:h-[500px]"}>
-                                            <div className={"w-[300px] h-[300px] md:w-[500px] md:h-[500px]"}
-                                                 id={"filtered_researchers"}/>
-                                        </SkeletonCircle>
-                                    </div>
-                                </div>
-                            </CardBody>
-                        </Card>
-                    </div>
                     <div className={"flex w-full p-2"}>
                         <Card className={"w-full gap-4 p-2"}>
                             <CardHeader className={"flex w-full justify-between"}>
@@ -546,14 +442,16 @@ export default function Page() {
                             </CardHeader>
                             <CardBody>
                                 <div className={"flex flex-col gap-4"}>
-                                    <div className={"flex flex-col gap-4 lg:flex-row"}>
-                                        <Skeleton isLoaded={!!researchers.length} className={"w-full h-[400px]"}>
+                                    <div className={"flex flex-col gap-4 justify-center items-center lg:flex-row"}>
+                                        <Skeleton isLoaded={!!researchers.length} className={"w-full h-[500px]"}>
                                             <div id={"all_researchers"}/>
                                         </Skeleton>
-                                        <div className={"flex flex-col gap-10"}>
-                                            <SkeletonText className={"lg:w-80"} noOfLines={6} spacing={10}
-                                                          skeletonHeight={3}></SkeletonText>
-                                        </div>
+                                        <SkeletonCircle
+                                            isLoaded={!!researchers.length}
+                                            className={"w-[300px] h-[300px] sm:w-[500px] sm:h-[500px]"}>
+                                            <div className={"w-[300px] h-[300px] sm:w-[500px] sm:h-[500px]"}
+                                                 id={"filtered_researchers"}/>
+                                        </SkeletonCircle>
                                     </div>
                                 </div>
                             </CardBody>
