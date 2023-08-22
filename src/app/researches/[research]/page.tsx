@@ -23,6 +23,7 @@ import {AiOutlineFilePdf} from "react-icons/ai";
 import {ViewResearchDataCard} from "@/app/researches/cards/view-research-data-card";
 import {ViewResearchGeographicDataCard} from "@/app/researches/cards/view-research-geographic-data-card";
 import {ViewResearchersCard} from "@/app/researches/cards/view-researchers-card";
+import {ViewFinancingCard} from "@/app/researches/cards/view-financing-card";
 
 
 export default function ResearchManagement({params}: { params: { research: string } }) {
@@ -51,7 +52,7 @@ export default function ResearchManagement({params}: { params: { research: strin
                         <ViewResearchDataCard research={research} setResearch={setResearch}/>
                         <ViewResearchGeographicDataCard research={research} setResearch={setResearch}/>
                         <ViewResearchersCard research={research} setResearch={setResearch}/>
-                        <EditFinancingCard research={research} setResearch={setResearch}/>
+                        <ViewFinancingCard research={research} setResearch={setResearch}/>
                         <EditResearchApprovalCard research={research} setResearch={setResearch}/>
                         <EditResearchFilesCard research={research} setResearch={setResearch}/>
                         <EditResearchAgreementsCard research={research}/>
