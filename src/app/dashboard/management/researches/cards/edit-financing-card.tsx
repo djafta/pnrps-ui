@@ -47,7 +47,9 @@ export interface FinancingCardProps {
 export function EditFinancingCard({research, setResearch}: FinancingCardProps) {
     const listFinanciersQuery = useQuery(LIST_FINANCIERS_QUERY);
     const listFinancingTypesQuery = useQuery(LIST_FINANCING_TYPES_QUERY);
-    const [getResearchFinancingsQuery, getResearchFinancingsQueryResult] = useLazyQuery(GET_RESEARCH_FINANCINGS_QUERY);
+    const [getResearchFinancingsQuery, getResearchFinancingsQueryResult] = useLazyQuery(GET_RESEARCH_FINANCINGS_QUERY, {
+        pollInterval: 1000 * 10 // 10 seconds
+    });
     const [updateResearchFinancingMutation, updateResearchFinancingMutationResult] = useMutation(UPDATE_RESEARCH_FINANCING_MUTATION);
 
     const [financiers, setFinanciers] = useState<Financier[]>([])

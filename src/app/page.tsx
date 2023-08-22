@@ -1,6 +1,6 @@
 "use client"
 
-import React, {useEffect} from "react";
+import React, {useEffect, useMemo} from "react";
 import {BiDownload} from "react-icons/bi";
 import {PublicHeader} from "@/components/header/public";
 
@@ -33,11 +33,21 @@ import {
 import {Research} from "@/models";
 import {useAuth} from "@/hooks/auth";
 import {useRouter} from "next/navigation";
+import {useQuery} from "@apollo/client";
+import {LIST_RESEARCHES_QUERY} from "@/apollo";
 
 export default function Home() {
     const {isOpen, onOpen, onClose} = useDisclosure();
     const {user} = useAuth();
     const router = useRouter();
+
+    const listResearchesQuery = useQuery(LIST_RESEARCHES_QUERY, {
+        pollInterval: 1000 * 30 // 30 seconds
+    })
+
+    const researches = useMemo(() => {
+        return (listResearchesQuery.data?.listResearches || []) as Research[]
+    }, [listResearchesQuery])
 
     useEffect(() => {
         if (user) {
@@ -135,36 +145,36 @@ export default function Home() {
 
                             </div>
                         </div>
-                        <TableContainer>
-                            <Table variant={"simple"}>
-                                <TableCaption>Pesquisas</TableCaption>
-                                <Thead>
-                                    <Tr>
-                                        <Th>Acronimo</Th>
-                                        <Th>Titulo</Th>
-                                        <Th>Tipo</Th>
-                                        <Th>Area</Th>
-                                        <Th>Area Geografica</Th>
-                                        <Th>Pesquisador</Th>
-                                    </Tr>
-                                </Thead>
-                                <Tbody>
-                                    {Array(0).fill("").map((value, index, array) => {
-                                        return (
-                                            <Tr key={index} onClick={() => handleResearchRowClick(value)}
-                                                className={"hover:bg-slate-200"}>
-                                                <Td>Doencas</Td>
-                                                <Td>Doencas</Td>
-                                                <Td>Doencas</Td>
-                                                <Td>Doencas</Td>
-                                                <Td>Doencas</Td>
-                                                <Td>Doencas</Td>
-                                            </Tr>
-                                        )
-                                    })}
-                                </Tbody>
-                            </Table>
-                        </TableContainer>
+                        <Card>
+                            <TableContainer>
+                                <Table variant={"simple"} colorScheme={"teal"}>
+                                    <TableCaption>Pesquisas</TableCaption>
+                                    <Thead>
+                                        <Tr>
+                                            <Th>Acronimo</Th>
+                                            <Th>Titulo</Th>
+                                            <Th>Tipo</Th>
+                                            <Th>Area</Th>
+                                            <Th>Pesquisador</Th>
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                        {researches.map((research) => {
+                                            return (
+                                                <Tr key={research.id} onClick={() => handleResearchRowClick(research)}
+                                                    className={"hover:bg-teal-500 hover:text-white cursor-pointer transition-colors"}>
+                                                    <Td>{research.acronym}</Td>
+                                                    <Td>{research.title}</Td>
+                                                    <Td>{research.subtype?.name}</Td>
+                                                    <Td>{research.subfield?.name}</Td>
+                                                    <Td>{research.owner?.firstName} {research.owner?.lastName}</Td>
+                                                </Tr>
+                                            )
+                                        })}
+                                    </Tbody>
+                                </Table>
+                            </TableContainer>
+                        </Card>
                     </Card>
                 </div>
             </main>

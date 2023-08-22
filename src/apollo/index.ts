@@ -1136,6 +1136,12 @@ export const LIST_RESEARCHES_QUERY = gql`
             visibility
             countries
             status
+            owner {
+                firstName
+                lastName
+                email
+                sex
+            }
             region {
                 id
                 name
