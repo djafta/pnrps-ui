@@ -4,14 +4,20 @@ import {
     Card,
     CardBody,
     CardHeader,
+    FormControl,
+    FormLabel,
     Heading,
     Select,
     Skeleton,
     SkeletonCircle,
+    SkeletonText,
 } from "@chakra-ui/react";
-
-import {GET_RESEARCHERS_BY_YEAR} from "@/apollo";
 import {useLazyQuery} from "@apollo/client";
+import {GET_RESEARCHERS_BY_YEAR} from "@/apollo";
+//@ts-ignore
+import ChartModuleMore from 'highcharts/highcharts-more.js';
+//@ts-ignore
+import HCSoldGauge from 'highcharts/modules/solid-gauge';
 import Highcharts from 'highcharts'
 
 import {User} from "@/models";
@@ -28,6 +34,9 @@ export default function Page() {
         year: new Date().getFullYear(),
         sex: 'M'
     })
+
+    ChartModuleMore(Highcharts);
+    HCSoldGauge(Highcharts);
 
     const updateFilter = useCallback((event: FormEvent<any>) => {
         const target = event.target as HTMLInputElement;
