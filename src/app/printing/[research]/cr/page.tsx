@@ -28,7 +28,7 @@ export default function ResearchPrint({params}: { params: { research: string, do
         return await Qrcode.toDataURL(`${window.location.origin}/${research?.id}`);
     }, [research])
 
-    if (research) {
+    if (global.window && research) {
         const {researcher} = research.collaborations.find(({role}) => isDefault(role)) as Collaboration
 
         return (
