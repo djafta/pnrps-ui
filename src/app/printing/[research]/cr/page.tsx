@@ -25,7 +25,7 @@ export default function ResearchPrint({params}: { params: { research: string, do
     }, [getResearchRCQuery])
 
     const qrcode = useMemo(async () => {
-        return await Qrcode.toDataURL(`${window.location.origin}/${research?.id}`);
+        return await Qrcode.toDataURL(`${global?.window.location.origin}/${research?.id}`);
     }, [research])
 
     if (global.window && research) {
