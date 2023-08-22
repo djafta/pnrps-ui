@@ -10,22 +10,24 @@ import {
     UseModalProps,
 } from "@chakra-ui/react";
 
-import {AiOutlineFilePdf} from "react-icons/ai";
-import React, {useCallback, useEffect, useMemo, useState} from "react";
-import {Research,} from "@/models";
-import {EditResearchDataCard} from "@/app/dashboard/management/researches/cards/edit-research-data-card";
-import {
-    EditResearchGeographicDataCard
-} from "@/app/dashboard/management/researches/cards/edit-research-geographic-data-card";
-import {EditResearchersCard} from "@/app/dashboard/management/researches/cards/edit-researchers-card";
-import {EditFinancingCard} from "@/app/dashboard/management/researches/cards/edit-financing-card";
-import {EditResearchApprovalCard} from "@/app/dashboard/management/researches/cards/edit-research-approval-card";
-import {EditResearchFilesCard} from "@/app/dashboard/management/researches/cards/edit-research-files-card";
 import Link from "next/link";
-import {EditResearchAgreementsCard} from "@/app/dashboard/management/researches/cards/edit-research-agreements-card";
-import {ResearchDangerZoneCard} from "@/app/dashboard/management/researches/cards/research-danger-zone-card";
-import {useLazyQuery} from "@apollo/client";
+
+import React, {useEffect, useState} from "react";
+
 import {HAS_APPROVAL_QUERY} from "@/apollo";
+import {useLazyQuery} from "@apollo/client";
+
+import {AiOutlineFilePdf} from "react-icons/ai";
+
+import {Research} from "@/models";
+
+import {ViewFinancingCard} from "@/app/researches/cards/view-financing-card";
+import {ViewResearchersCard} from "@/app/researches/cards/view-researchers-card";
+import {ViewResearchDataCard} from "@/app/researches/cards/view-research-data-card";
+import {ViewResearchFilesCard} from "@/app/researches/cards/view-research-files-card";
+import {ViewResearchApprovalCard} from "@/app/researches/cards/view-research-approval-card";
+import {EditResearchAgreementsCard} from "@/app/dashboard/management/researches/cards/edit-research-agreements-card";
+import {ViewResearchGeographicDataCard} from "@/app/researches/cards/view-research-geographic-data-card";
 
 export interface EditResearchModalProps extends UseModalProps {
     research?: Research | null
@@ -61,14 +63,13 @@ export function ViewResearchModal({isOpen, onClose, research}: EditResearchModal
                     </ModalHeader>
                     <ModalBody>
                         <div className={"flex flex-col gap-6"}>
-                            <EditResearchDataCard research={researchData} setResearch={setResearchData}/>
-                            <EditResearchGeographicDataCard research={researchData} setResearch={setResearchData}/>
-                            <EditResearchersCard research={researchData} setResearch={setResearchData}/>
-                            <EditFinancingCard research={researchData} setResearch={setResearchData}/>
-                            <EditResearchApprovalCard research={researchData} setResearch={setResearchData}/>
-                            <EditResearchFilesCard research={researchData} setResearch={setResearchData}/>
+                            <ViewResearchDataCard research={researchData} setResearch={setResearchData}/>
+                            <ViewResearchGeographicDataCard research={researchData} setResearch={setResearchData}/>
+                            <ViewResearchersCard research={researchData} setResearch={setResearchData}/>
+                            <ViewFinancingCard research={researchData} setResearch={setResearchData}/>
+                            <ViewResearchApprovalCard research={researchData} setResearch={setResearchData}/>
+                            <ViewResearchFilesCard research={researchData} setResearch={setResearchData}/>
                             <EditResearchAgreementsCard research={researchData}/>
-                            <ResearchDangerZoneCard research={researchData} setResearch={setResearchData}/>
                         </div>
                     </ModalBody>
                     <ModalFooter>

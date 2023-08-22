@@ -25,6 +25,7 @@ import {LIST_RESEARCHES_QUERY} from "@/apollo";
 import {useEffect, useMemo, useState} from "react";
 import {useQuery} from "@apollo/client";
 import {Research} from "@/models";
+import {ViewResearchModal} from "@/app/researches/view-research-modal";
 
 export default function ResearchManagement() {
     const listResearchesQuery = useQuery(LIST_RESEARCHES_QUERY, {
@@ -54,14 +55,10 @@ export default function ResearchManagement() {
 
     return (
         <main className={"pt-24 flex flex-col gap-10 lg:ps-16"}>
-            <EditResearchModal
+            <ViewResearchModal
                 isOpen={editResearchModalDisclosure.isOpen}
                 onClose={editResearchModalDisclosure.onClose}
                 research={research}
-            />
-            <CreateResearchModal
-                isOpen={createResearchModalDisclosure.isOpen}
-                onClose={createResearchModalDisclosure.onClose}
             />
             <div className={"p-2 flex flex-col gap-2"}>
                 <div className={"flex justify-end"}>
