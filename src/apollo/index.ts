@@ -1495,3 +1495,20 @@ export const HAS_APPROVAL_QUERY = gql`
         }
     }
 `
+
+export const GET_USER_BY_ID = gql`
+    query GetUserById($id: String!) {
+        getUserById(id: $id) {
+            firstName
+            lastName
+            email
+            id
+            features
+            verified
+            createdAt
+            updatedAt
+            birthDate
+            sex
+        }
+    }
+`

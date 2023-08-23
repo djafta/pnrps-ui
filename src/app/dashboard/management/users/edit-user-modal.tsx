@@ -10,21 +10,21 @@ import {
     ModalProps, Table, Tbody, Td, Tr, useToast
 } from "@chakra-ui/react";
 import {User} from "@/models";
-import React, {useCallback, useEffect, useState} from "react";
-import {useMutation} from "@apollo/client";
-import {LIST_USERS_QUERY, UPDATE_USER_MUTATION} from "@/apollo";
+import React, {useCallback, useEffect, useMemo, useState} from "react";
+import {useLazyQuery, useMutation} from "@apollo/client";
+import {GET_USER_BY_ID, LIST_USERS_QUERY, UPDATE_USER_MUTATION} from "@/apollo";
 
 export interface EditUserModalProps extends Omit<ModalProps, "children"> {
-    readonly user?: User
+    readonly id?: string
 }
 
-export function EditUserModal({isOpen, onClose, user}: EditUserModalProps) {
+export function EditUserModal({isOpen, onClose, id}: EditUserModalProps) {
     const toast = useToast();
-    const [userData, setUserData] = useState<User | undefined>(user)
-    const [isChanged, setChanged] = useState(false)
+    const [userData, setUserData] = useState<User | undefined>()
     const [updateUserMutation, updateUserMutationResult] = useMutation(UPDATE_USER_MUTATION, {
         refetchQueries: [LIST_USERS_QUERY]
     });
+    const [getUserByIdQuery, getUserByIdQueryResult] = useLazyQuery(GET_USER_BY_ID)
 
     const handleUpdateUser = useCallback(async () => {
         await updateUserMutation({
@@ -60,11 +60,18 @@ export function EditUserModal({isOpen, onClose, user}: EditUserModalProps) {
 
     useEffect(() => {
         if (isOpen) {
-            setUserData(user)
+            getUserByIdQuery({
+                variables: {
+                    id
+                }
+            }).then((result => {
+                console.log(result)
+                setUserData(result.data?.getUserById)
+            }))
         } else {
             setUserData(undefined)
         }
-    }, [isOpen, user])
+    }, [isOpen, id, getUserByIdQuery])
 
     const hasFeatures = useCallback((...list: string[]) => {
         for (let feature of list) {

@@ -60,7 +60,7 @@ export default function UsersManagement() {
     return (
         <main className={"w-full min-h-[90vh] pt-24 flex flex-col gap-10 gradient-1 lg:ps-16"}>
             <EditUserModal
-                user={selects[0]}
+                id={selects[0]?.id}
                 isOpen={editUserModalDisclosure.isOpen}
                 onClose={editUserModalDisclosure.onClose}
             />
