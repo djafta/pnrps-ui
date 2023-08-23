@@ -1,9 +1,19 @@
 "use client"
-import {useQuery} from "@apollo/client";
+import {useMutation, useQuery} from "@apollo/client";
 import Highcharts from "highcharts"
-import React, {useEffect, useState} from "react";
-import {Box, Button, Card, Skeleton, SkeletonCircle, SkeletonText, Text, useDisclosure} from "@chakra-ui/react";
-import {GET_RESEARCH_STATISTIC, GET_USER_STATISTIC} from "@/apollo";
+import React, {useCallback, useEffect, useState} from "react";
+import {
+    Box,
+    Button,
+    Card,
+    Skeleton,
+    SkeletonCircle,
+    SkeletonText,
+    Text,
+    useDisclosure,
+    useToast
+} from "@chakra-ui/react";
+import {ASK_FOR_PERMISSION_MUTATION, GET_RESEARCH_STATISTIC, GET_USER_STATISTIC} from "@/apollo";
 import {useAuth} from "@/hooks/auth";
 import Image from "next/image";
 
@@ -399,20 +409,44 @@ export default function Dashboard() {
                         </>
                     }
                 </div>
-            </main> :
-            <main className={"w-full min-h-[90vh] flex items-center justify-center"}>
-                <div className={"flex flex-col gap-2 items-center"}>
-                    <Image width={100} height={100} src={"/lock-gif.gif"} alt={""}/>
-                    <h2 className={"text-gray-400 text-lg text-center"}>
-                        No momento não possui permissões para <strong>pesquisas</strong>
-                    </h2>
-                    <p className={"text-gray-300"}>
-                        Pode enviar uma notificação aos administradores para obter as permições necessárias
-                    </p>
-                    <div className={"text-center"}>
-                        <Button colorScheme={"teal"}>Notificar</Button>
-                    </div>
+            </main> : <NoPermissionPanel/>
+
+    )
+}
+
+function NoPermissionPanel() {
+    const [askForPermissionMutation, askForPermissionMutationResult] = useMutation(ASK_FOR_PERMISSION_MUTATION)
+    const toast = useToast();
+
+    const sendNotification = useCallback(async () => {
+        await askForPermissionMutation()
+        toast({
+            title: `Notificação enviada`,
+            description: `Um dos administadores irá resolver seu problema assim que possível`,
+            status: "success",
+            colorScheme: "teal",
+            position: "bottom-right",
+            isClosable: true,
+        })
+    }, [toast, askForPermissionMutation])
+
+    return (
+        <main className={"w-full min-h-[90vh] flex items-center justify-center"}>
+            <div className={"flex flex-col gap-2 items-center"}>
+                <Image width={100} height={100} src={"/lock-gif.gif"} alt={""}/>
+                <h2 className={"text-gray-400 text-lg text-center"}>
+                    No momento não possui permissões para <strong>pesquisas</strong>
+                </h2>
+                <p className={"text-gray-300"}>
+                    Pode enviar uma notificação aos administradores para obter as permições necessárias
+                </p>
+                <div className={"text-center"}>
+                    <Button
+                        isLoading={askForPermissionMutationResult.loading} onClick={sendNotification}
+                        colorScheme={"teal"}
+                    >Notificar</Button>
                 </div>
-            </main>
+            </div>
+        </main>
     )
 }

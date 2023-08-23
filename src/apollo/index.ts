@@ -1512,3 +1512,11 @@ export const GET_USER_BY_ID = gql`
         }
     }
 `
+
+export const ASK_FOR_PERMISSION_MUTATION = gql`
+    mutation AskForPermission {
+        askForPermission {
+            message
+        }
+    }
+`

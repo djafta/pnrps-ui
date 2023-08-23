@@ -54,7 +54,10 @@ export default function UsersManagement() {
         if (listUsersQuery.data?.listUsers) {
             setUsers(listUsersQuery.data.listUsers)
         }
-
+        const user = new URLSearchParams(window.location.search).get("user")
+        if (user) {
+            setSearch(prev => prev !== user ? user : prev)
+        }
     }, [listUsersQuery])
 
     return (
@@ -85,7 +88,8 @@ export default function UsersManagement() {
                                 </div>
                                 <FormControl
                                     className={"flex max-w-[20rem] items-center my-auto rounded-lg bg-transparent focus-within:bg-white overflow-hidden transition-colors"}>
-                                    <Input variant={"unstyled"} onChange={(e) => {
+                                    <Input value={search} variant={"unstyled"} onChange={(e) => {
+                                        setSearch(e.target.value)
                                     }}
                                            className={"p-2 min-w-0 text-gray-500 appearance-none outline-none bg-transparent"}
                                            type={"text"}/>
