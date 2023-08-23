@@ -41,8 +41,12 @@ import {ViewResearchFilesCard} from "@/app/researches/cards/view-research-files-
 import {EditResearchAgreementsCard} from "@/app/dashboard/management/researches/cards/edit-research-agreements-card";
 import Link from "next/link";
 import {AiOutlineFilePdf} from "react-icons/ai";
+import {useRouter} from "next/navigation";
+import {useAuth} from "@/hooks/auth";
 
 export default function Home() {
+    const router = useRouter()
+    const {user} = useAuth()
     const listResearchesQuery = useQuery(LIST_RESEARCHES_QUERY, {
         pollInterval: 1000 * 30 // 30 seconds
     })
@@ -76,6 +80,12 @@ export default function Home() {
             disclosure.onOpen()
         }
     }
+
+    useEffect(() => {
+        if (user) {
+            router.push("/dashboard")
+        }
+    }, [router, user])
 
     useEffect(() => {
         setResearch(research => researches.find((r) => research?.id === r.id) as Research)
