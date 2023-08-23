@@ -2,7 +2,7 @@
 import {useQuery} from "@apollo/client";
 import Highcharts from "highcharts"
 import React, {useEffect, useState} from "react";
-import {Box, Card, Skeleton, SkeletonCircle, SkeletonText, Text, useDisclosure} from "@chakra-ui/react";
+import {Box, Button, Card, Skeleton, SkeletonCircle, SkeletonText, Text, useDisclosure} from "@chakra-ui/react";
 import {GET_RESEARCH_STATISTIC, GET_USER_STATISTIC} from "@/apollo";
 import {useAuth} from "@/hooks/auth";
 import Image from "next/image";
@@ -401,6 +401,18 @@ export default function Dashboard() {
                 </div>
             </main> :
             <main className={"w-full min-h-[90vh] flex items-center justify-center"}>
+                <div className={"flex flex-col gap-2 items-center"}>
+                    <Image width={100} height={100} src={"/lock-gif.gif"} alt={""}/>
+                    <h2 className={"text-gray-400 text-lg text-center"}>
+                        No momento não possui permissões para <strong>pesquisas</strong>
+                    </h2>
+                    <p className={"text-gray-300"}>
+                        Pode enviar uma notificação aos administradores para obter as permições necessárias
+                    </p>
+                    <div className={"text-center"}>
+                        <Button colorScheme={"teal"}>Notificar</Button>
+                    </div>
+                </div>
             </main>
     )
 }
