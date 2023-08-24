@@ -74,7 +74,9 @@ export default function Page() {
         const token = params.get("token")
 
         if (!token) {
-            setInvalidToken(true)
+            if (mode != "signout") {
+                setInvalidToken(true)
+            }
         } else {
             switch (mode) {
                 case "confirm":
