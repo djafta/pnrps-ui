@@ -1520,3 +1520,27 @@ export const ASK_FOR_PERMISSION_MUTATION = gql`
         }
     }
 `
+
+export const SWITCH_TO_ADMIN = gql`
+    mutation SwitchToAdmin {
+        switchToAdmin {
+            message
+        }
+    }
+`
+
+export const SWITCH_TO_RESEARCHER = gql`
+    mutation SwitchToResearcher {
+        switchToResearcher {
+            message
+        }
+    }
+`
+
+export const SIGN_OUT_MUTATION = gql`
+    mutation SignOut {
+        signOut {
+            message
+        }
+    }
+`

@@ -1,5 +1,5 @@
 import {
-    Accordion,
+    Accordion, Button,
     Flex,
     IconButton,
     Menu,
@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 
 import messages from "@/locales/messages.pt.json";
-import React, {useEffect, useState, MouseEvent} from "react";
+import React, {useEffect, useState, MouseEvent, useCallback} from "react";
 
 import {BiUser} from "react-icons/bi";
 
@@ -21,9 +21,27 @@ import {Management} from "@/components/header/private/management";
 import {Report} from "@/components/header/private/report";
 import {Settings} from "@/components/header/private/settings";
 import {Profile} from "@/components/header/private/profile";
+import {useAuth} from "@/hooks/auth";
+import {useMutation} from "@apollo/client";
+import {SWITCH_TO_ADMIN, SWITCH_TO_RESEARCHER} from "@/apollo";
+import {useRouter} from "next/navigation";
 
 export function PrivateHeader() {
     const [expanded, setExpanded] = useState(false);
+    const [switchToAdminMutation, switchToAdminMutationResult] = useMutation(SWITCH_TO_ADMIN);
+    const [switchToResearcherMutation, switchToResearcherMutationResult] = useMutation(SWITCH_TO_RESEARCHER);
+    const {isAuthorized} = useAuth();
+    const router = useRouter();
+
+    const switchToAdmin = useCallback(async () => {
+        await switchToAdminMutation();
+        router.push("/dashboard")
+    }, [switchToAdminMutation, router])
+
+    const switchToResearcher = useCallback(async () => {
+        await switchToResearcherMutation();
+        router.push("/dashboard")
+    }, [switchToResearcherMutation, router])
 
     useEffect(() => {
         window.onclick = (e) => {
@@ -67,11 +85,31 @@ export function PrivateHeader() {
                                     {messages.private.header.menu.items[0]}
                                 </Link>
                             </MenuItem>
+
                             <MenuItem>
                                 <Link className={"w-full h-full"} href={"/auth?mode=signout"}>
                                     {messages.private.header.menu.items[1]}
                                 </Link>
                             </MenuItem>
+                            <div className={"border-t flex flex-col gap-2 p-2"}>
+                                {
+                                    isAuthorized("switch:account") ?
+                                        isAuthorized("create:research:self") ? (
+                                            <Button
+                                                onClick={switchToAdmin}
+                                                isLoading={switchToAdminMutationResult.loading}
+                                                className={"rounded-3xl"}
+                                                colorScheme={"teal"}>Switch to Admin</Button>
+                                        ) : (
+                                            <Button
+                                                onClick={switchToResearcher}
+                                                isLoading={switchToResearcherMutationResult.loading}
+                                                className={"rounded-3xl"}
+                                                colorScheme={"teal"}>Switch to Researcher</Button>
+                                        )
+                                        : null
+                                }
+                            </div>
                         </MenuList>
                     </Menu>
                 </Flex>

@@ -4,7 +4,7 @@ import {Spinner} from "@chakra-ui/react";
 import {useCallback, useEffect, useState} from "react";
 import {useRouter, useSearchParams} from "next/navigation";
 import {useMutation} from "@apollo/client";
-import {CONFIRM_ACCOUNT_MUTATION, CONFIRM_SIGNIN_MUTATION} from "@/apollo";
+import {CONFIRM_ACCOUNT_MUTATION, CONFIRM_SIGNIN_MUTATION, SIGN_OUT_MUTATION} from "@/apollo";
 
 export default function Page() {
     const [isInvalidToken, setInvalidToken] = useState(false);
@@ -12,6 +12,7 @@ export default function Page() {
     const params = useSearchParams()
     const [confirmAccountMutation] = useMutation(CONFIRM_ACCOUNT_MUTATION)
     const [confirmSigninMutation] = useMutation(CONFIRM_SIGNIN_MUTATION)
+    const [signOutMutation] = useMutation(SIGN_OUT_MUTATION)
 
     const confirmAccount = useCallback(async (token: string) => {
         try {
@@ -57,6 +58,17 @@ export default function Page() {
         }
     }, [confirmSigninMutation])
 
+
+    const signOut = useCallback(async () => {
+        try {
+            await signOutMutation()
+            window.localStorage.removeItem("authorization")
+            window.parent.postMessage("/")
+        } catch (e) {
+            window.parent.postMessage("/?mode=signin")
+        }
+    }, [signOutMutation])
+
     useEffect(() => {
         const mode = params.get("mode")
         const token = params.get("token")
@@ -72,16 +84,11 @@ export default function Page() {
                     confirmSignin(token)
                     break
                 case "signout":
-                    try {
-                        window.localStorage.removeItem("authorization")
-                        window.parent.postMessage("/")
-                    } catch (e) {
-                        window.parent.postMessage("/?mode=signin")
-                    }
+                    signOut()
                     break
             }
         }
-    }, [params, confirmAccount, confirmSignin, router])
+    }, [params, confirmAccount, confirmSignin, router, signOut])
 
     return (
         <main className={"fixed w-full h-full left-0 top-0 flex items-center justify-center"}>

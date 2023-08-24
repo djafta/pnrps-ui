@@ -65,7 +65,6 @@ export function EditUserModal({isOpen, onClose, id}: EditUserModalProps) {
                     id
                 }
             }).then((result => {
-                console.log(result)
                 setUserData(result.data?.getUserById)
             }))
         } else {
