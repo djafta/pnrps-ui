@@ -85,7 +85,6 @@ export const LIST_USERS_QUERY = gql`
         listUsers {
             firstName
             lastName
-            features
             email
             id
         }

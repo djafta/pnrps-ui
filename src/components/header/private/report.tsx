@@ -14,7 +14,7 @@ export function Report({expanded}: ReportProps) {
 
     const {isAuthorized} = useAuth();
 
-    if (isAuthorized("read:research:list", "read:researcher:list")) {
+    if (isAuthorized("read:research:list", "read:research:self", "read:user:list")) {
         return (
             <AccordionItem>
                 <div className={"relative flex overflow-hidden items-center w-full hover:bg-slate-200"}>
@@ -40,7 +40,7 @@ export function Report({expanded}: ReportProps) {
                     className={`${expanded ? "block" : "hidden"} p-0 bg-slate-400 text-white`}
                 >
                     {
-                        isAuthorized("read:research:list") ?
+                        isAuthorized("read:research:list", "read:research:self") ?
                             <Link
                                 href={"/dashboard/reports/researches"}
                                 className={"flex items-center py-2 ps-6 gap-6 hover:bg-slate-200 overflow-hidden whitespace-nowrap"}
@@ -55,7 +55,7 @@ export function Report({expanded}: ReportProps) {
                             : null
                     }
                     {
-                        isAuthorized("read:researcher:list") ?
+                        isAuthorized("read:user:list") ?
                             <Link
                                 href={"/dashboard/reports/researchers"}
                                 className={"flex items-center py-2 ps-6 gap-6 hover:bg-slate-200 overflow-hidden whitespace-nowrap"}
