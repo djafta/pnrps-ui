@@ -1,10 +1,10 @@
 "use client";
-import {Providers} from "@/app/providers";
 import {PrivateHeader} from "@/components/header/private";
 import React, {useEffect} from "react";
 import {useAuth} from "@/hooks/auth";
 import {useRouter} from "next/navigation";
 import {Spinner} from "@chakra-ui/react";
+import {client} from "@/apollo/client";
 
 export default function RootLayout({children,}: { children: React.ReactNode }) {
     const {user, loading} = useAuth();
@@ -12,6 +12,7 @@ export default function RootLayout({children,}: { children: React.ReactNode }) {
 
     useEffect(() => {
         if (!loading && !user) {
+            client.stop()
             router.push("/?mode=signin", {
                 query: {mode: 'signin'},
             });

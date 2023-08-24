@@ -28,7 +28,7 @@ export function AuthProvider({children}: AuthProviderProps) {
     const [loading, setLoading] = useState(true);
     const [user, setUser] = useState<User>()
 
-    const [times, setTimes] = useState(3);
+    const [times, setTimes] = useState(5);
 
     const [query, result] = useLazyQuery(GET_USER_SELF_QUERY, {
         pollInterval: 1000 * 5,
