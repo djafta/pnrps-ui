@@ -10,7 +10,7 @@ export default function Page() {
     useEffect(() => {
         setParams(window?.location.href.split("?")[1])
         window.onmessage = (e) => {
-            router.push(e.data)
+            setTimeout(() => router.push(e.data), 1000 * 5)
         }
     }, [router])
 
