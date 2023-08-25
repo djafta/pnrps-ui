@@ -29,6 +29,7 @@ import {useRouter, useSearchParams} from "next/navigation";
 
 import {useMutation} from "@apollo/client";
 import {AUTH_WITH_EMAIL_MUTATION, CREATE_USER_SELF_MUTATION} from "@/apollo";
+import Link from "next/link";
 
 export function PublicHeader() {
     const {isOpen, onOpen, onClose} = useDisclosure();
@@ -52,7 +53,9 @@ export function PublicHeader() {
     return (
         <header className={"fixed w-full p-2 flex justify-between z-[1000] bg-white shadow-md"}>
             <div className={"w-full flex"}>
-                <Image width={40} height={40} src={"/icon-header.png"} alt={"INS logo"}/>
+                <Link href={"/"}>
+                    <Image width={40} height={40} src={"/icon-header.png"} alt={"INS logo"}/>
+                </Link>
             </div>
             <Flex justifyContent={"flex-end"}>
                 <Menu>
